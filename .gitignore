@@ -1,0 +1,59 @@
+# ==================== 后端 (Java/Maven) ====================
+
+# Maven
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# IDE
+*.class
+*.log
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.iml
+.idea/
+*.swp
+*~
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+.springBeans
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ==================== 前端 (Node/Vue) ====================
+
+# Dependencies
+frontend/node_modules/
+frontend/dist/
+
+# Logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+
+# IDE
+frontend/.idea/
+frontend/*.suo
+frontend/*.ntvs*
+frontend/*.njsproj
+frontend/*.sln
+frontend/*.sw?
+
+# Environment
+frontend/.env.local
+frontend/.env.*.local
+
+# Vue dist
+frontend/dist-ssr
