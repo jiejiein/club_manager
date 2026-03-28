@@ -1,0 +1,258 @@
+// ============================================
+// 全局样式入口文件
+// ============================================
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+// Element Plus 全局覆盖
+.el-menu {
+  border-right: none !important;
+}
+
+// 导入变量
+@import './variables.scss';
+
+// 导入动画
+@import './animations.scss';
+
+// 导入深色模式
+@import './dark.scss';
+
+// 全局工具类
+.page-container {
+  animation: fadeInUp 0.5s ease;
+}
+
+// 卡片通用样式
+.card-base {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// 按钮通用样式
+.btn-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: #fff;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// 输入框聚焦效果
+.input-focus-effect {
+  transition: all 0.3s ease;
+  
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+    border-color: #667eea;
+  }
+}
+
+// 标签样式
+.tag-gradient {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  color: #667eea;
+}
+
+// 表格行悬停效果
+.table-row-hover {
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(102, 126, 234, 0.03);
+  }
+}
+
+// 分割线样式
+.divider-gradient {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+}
+
+// 状态指示点
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  
+  &.online {
+    background: #10b981;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+  }
+  
+  &.offline {
+    background: #94a3b8;
+  }
+  
+  &.busy {
+    background: #f59e0b;
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+  }
+}
+
+// ============================================
+// 页面布局优化
+// ============================================
+
+// 页面容器
+.payment-page,
+.activity-page,
+.club-page,
+.user-page,
+.apply-page,
+.type-page,
+.member-page,
+.record-page,
+.notification-page,
+.system-log-page,
+.president-transfer-page,
+.dashboard-page {
+  .el-card {
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    
+    .el-card__header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #f1f5f9;
+      
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 16px;
+        font-weight: 600;
+        color: #1e293b;
+      }
+    }
+    
+    .el-card__body {
+      padding: 20px;
+    }
+  }
+}
+
+// 搜索表单优化
+.search-form {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  
+  .el-form-item {
+    margin-bottom: 0;
+    margin-right: 12px;
+    
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+  
+  .el-input,
+  .el-select {
+    width: 180px;
+  }
+  
+  .el-button {
+    padding: 8px 16px;
+    height: 32px;
+  }
+}
+
+// 表格样式优化
+.el-table {
+  font-size: 14px;
+
+  .el-table__header {
+    th {
+      background: #f8fafc !important;
+      color: #475569;
+      font-weight: 600;
+      padding: 14px 0;
+      height: 48px;
+    }
+  }
+
+  .el-table__body {
+    td {
+      padding: 12px 0;
+      height: 52px;
+    }
+  }
+
+  .cell {
+    line-height: 1.5;
+    padding: 0 16px;
+  }
+
+  // 行悬停效果
+  tr:hover > td {
+    background-color: #f8fafc !important;
+  }
+}
+
+// 分页器优化
+.el-pagination {
+  margin-top: 20px;
+  padding: 0;
+
+  .el-pagination__total {
+    color: #64748b;
+    font-size: 14px;
+  }
+
+  .el-pagination__sizes {
+    .el-input {
+      width: 110px;
+    }
+  }
+}
+
+// 按钮链接样式优化
+.el-button.is-link {
+  padding: 6px 10px;
+  height: auto;
+  font-size: 14px;
+}
+
+// 标签样式优化
+.el-tag {
+  padding: 0 10px;
+  height: 28px;
+  line-height: 26px;
+  font-size: 13px;
+  border-radius: 4px;
+}
