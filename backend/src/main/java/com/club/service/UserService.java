@@ -13,7 +13,7 @@ public interface UserService {
 
     void register(RegisterDTO dto);
 
-    UserVO getCurrentUser();
+    UserVO getCurrentUserInfo();
 
     UserVO getUserById(Long id);
 

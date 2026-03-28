@@ -177,11 +177,12 @@ CREATE TABLE IF NOT EXISTS sys_payment_record (
     deleted INT DEFAULT 0 COMMENT '是否删除：0否 1是'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='缴费记录表';
 
--- 初始化账号（密码均为：666666）
+-- 初始化账号（密码均为：123456）
+-- 注意：如果后续执行 data-generator-final.sql，这些账号会被覆盖
 INSERT INTO sys_user (username, password, nickname, role, status) VALUES 
-('admin', '666666', '系统管理员', 1, 1),
-('president', '666666', '社长测试', 2, 1),
-('student', '666666', '学生测试', 3, 1);
+('admin', '123456', '系统管理员', 1, 1),
+('president', '123456', '社长测试', 2, 1),
+('student', '123456', '学生测试', 3, 1);
 
 -- 初始化社团类型
 INSERT INTO sys_club_type (name, description, sort) VALUES 

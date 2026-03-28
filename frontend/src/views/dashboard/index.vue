@@ -667,12 +667,13 @@ onMounted(() => {
 }
 
 .stat-card {
-  background: #fff;
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color);
   border-radius: 16px;
   padding: 24px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--el-box-shadow-light);
   transition: all 0.3s ease;
   animation: card-slide-up 0.6s ease-out;
   
@@ -770,10 +771,11 @@ onMounted(() => {
 }
 
 .chart-card {
-  background: #fff;
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color);
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--el-box-shadow-light);
 }
 
 .chart-header {
@@ -789,10 +791,10 @@ onMounted(() => {
   gap: 8px;
   font-size: 16px;
   font-weight: 600;
-  color: #1e293b;
-  
+  color: var(--el-text-color-primary);
+
   .el-icon {
-    color: #667eea;
+    color: var(--el-color-primary);
   }
 }
 
@@ -803,10 +805,11 @@ onMounted(() => {
 // ==================== 底部区域 ====================
 .bottom-row {
   .section-card {
-    background: #fff;
+    background: var(--el-bg-color);
+    border: 1px solid var(--el-border-color);
     border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--el-box-shadow-light);
     height: 100%;
   }
 }
@@ -849,7 +852,7 @@ onMounted(() => {
   transition: all 0.3s;
   
   &:hover {
-    background: #f8fafc;
+    background: var(--el-fill-color-light);
     transform: translateY(-2px);
   }
 }
@@ -872,7 +875,7 @@ onMounted(() => {
 
 .action-name {
   font-size: 13px;
-  color: #475569;
+  color: var(--el-text-color-regular);
   font-weight: 500;
 }
 
@@ -893,7 +896,7 @@ onMounted(() => {
   cursor: pointer;
   
   &:hover {
-    background: #f8fafc;
+    background: var(--el-fill-color-light);
   }
 }
 
@@ -918,7 +921,7 @@ onMounted(() => {
 
 .notice-title {
   font-size: 14px;
-  color: #1e293b;
+  color: var(--el-text-color-primary);
   margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
@@ -927,7 +930,7 @@ onMounted(() => {
 
 .notice-time {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--el-text-color-secondary);
 }
 
 // ==================== 响应式适配 ====================

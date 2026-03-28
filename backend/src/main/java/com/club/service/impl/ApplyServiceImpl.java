@@ -2,6 +2,9 @@ package com.club.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.club.common.BaseService;
+import com.club.common.BusinessException;
+import com.club.common.ErrorCode;
 import com.club.entity.Apply;
 import com.club.entity.Club;
 import com.club.entity.ClubMember;
@@ -13,18 +16,24 @@ import com.club.enums.StatusEnum;
 import com.club.mapper.ApplyMapper;
 import com.club.mapper.ClubMapper;
 import com.club.mapper.ClubMemberMapper;
-import com.club.mapper.UserMapper;
 import com.club.service.ApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * 申请服务实现类
+ * 优化后的代码结构：
+ * 1. 继承 BaseService 获取通用方法
+ * 2. 使用 BusinessException 替代 RuntimeException
+ * 3. 使用 ErrorCode 统一管理错误信息
+ * 4. 提取重复逻辑为私有方法
+ */
 @Service
-public class ApplyServiceImpl implements ApplyService {
+public class ApplyServiceImpl extends BaseService implements ApplyService {
 
     @Autowired
     private ApplyMapper applyMapper;
@@ -35,128 +44,78 @@ public class ApplyServiceImpl implements ApplyService {
     @Autowired
     private ClubMemberMapper clubMemberMapper;
 
-    @Autowired
-    private UserMapper userMapper;
+    // ==================== 查询方法 ====================
 
     @Override
     public Page<Apply> getApplyPage(Integer current, Integer size, Long clubId, Integer status) {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userMapper.selectById(userId);
-        
+        User user = getCurrentUser();
         Page<Apply> page = new Page<>(current, size);
         LambdaQueryWrapper<Apply> wrapper = new LambdaQueryWrapper<>();
-        
+
         // 社长只能查看自己社团的申请
-        if (user.getRole().equals(RoleEnum.PRESIDENT.getCode())) {
-            // 获取社长管理的社团ID
-            List<Long> myClubIds = clubMapper.selectList(
-                new LambdaQueryWrapper<Club>()
-                    .eq(Club::getPresidentId, userId)
-                    .select(Club::getId)
-            ).stream().map(Club::getId).toList();
-            
-            if (myClubIds.isEmpty()) {
-                return page; // 空结果
-            }
-            
-            if (clubId != null) {
-                // 如果指定了clubId，检查是否是自己的社团
-                if (!myClubIds.contains(clubId)) {
-                    throw new RuntimeException("只能查看自己社团的申请");
-                }
-                wrapper.eq(Apply::getClubId, clubId);
-            } else {
-                wrapper.in(Apply::getClubId, myClubIds);
-            }
+        if (isRole(RoleEnum.PRESIDENT.getCode())) {
+            wrapper = buildPresidentQueryWrapper(user.getId(), clubId);
         } else if (clubId != null) {
             wrapper.eq(Apply::getClubId, clubId);
         }
-        
+
         if (status != null) {
             wrapper.eq(Apply::getStatus, status);
         }
         wrapper.orderByDesc(Apply::getCreateTime);
+
         return applyMapper.selectPage(page, wrapper);
     }
 
     @Override
-    public void submitApply(Long clubId, String reason) {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userMapper.selectById(userId);
-        Club club = clubMapper.selectById(clubId);
-        
-        if (!club.getStatus().equals(ClubStatusEnum.ACTIVE.getCode())) {
-            throw new RuntimeException("社团未正常运营，无法申请加入");
-        }
-        
-        Long count = applyMapper.selectCount(
+    public List<Apply> getMyApplies() {
+        return applyMapper.selectList(
             new LambdaQueryWrapper<Apply>()
-                .eq(Apply::getClubId, clubId)
-                .eq(Apply::getUserId, userId)
-                .eq(Apply::getStatus, ApplyStatusEnum.PENDING.getCode())
+                .eq(Apply::getUserId, getCurrentUserId())
+                .orderByDesc(Apply::getCreateTime)
         );
-        if (count > 0) {
-            throw new RuntimeException("已有待审核的申请");
-        }
-        
-        Long memberCount = clubMemberMapper.selectCount(
+    }
+
+    @Override
+    public Page<ClubMember> getClubMembers(Long clubId, Integer current, Integer size) {
+        validateClubPermission(clubId);
+
+        Page<ClubMember> page = new Page<>(current, size);
+        return clubMemberMapper.selectPage(page,
             new LambdaQueryWrapper<ClubMember>()
                 .eq(ClubMember::getClubId, clubId)
-                .eq(ClubMember::getUserId, userId)
+                .orderByDesc(ClubMember::getJoinTime)
         );
-        if (memberCount > 0) {
-            throw new RuntimeException("已是该社团成员");
-        }
-        
-        Apply apply = new Apply();
-        apply.setClubId(clubId);
-        apply.setClubName(club.getName());
-        apply.setUserId(userId);
-        apply.setUserName(user.getNickname());
-        apply.setReason(reason);
-        apply.setStatus(ApplyStatusEnum.PENDING.getCode());
+    }
+
+    // ==================== 操作方法 ====================
+
+    @Override
+    public void submitApply(Long clubId, String reason) {
+        Long userId = getCurrentUserId();
+        User user = getCurrentUser();
+        Club club = getClubOrThrow(clubId);
+
+        validateClubActive(club);
+        validateNoPendingApply(userId, clubId);
+        validateNotMember(userId, clubId);
+
+        Apply apply = buildApply(user, club, reason);
         applyMapper.insert(apply);
     }
 
     @Override
     public void auditApply(Long applyId, Integer status, String rejectReason) {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userMapper.selectById(userId);
-        
-        Apply apply = applyMapper.selectById(applyId);
-        if (apply == null) {
-            throw new RuntimeException("申请不存在");
-        }
-        
-        // 社长只能审核自己社团的申请
-        if (user.getRole().equals(RoleEnum.PRESIDENT.getCode())) {
-            Club club = clubMapper.selectById(apply.getClubId());
-            if (club == null || !club.getPresidentId().equals(userId)) {
-                throw new RuntimeException("只能审核自己社团的申请");
-            }
-        }
-        
-        if (!apply.getStatus().equals(ApplyStatusEnum.PENDING.getCode())) {
-            throw new RuntimeException("该申请已处理");
-        }
-        
-        apply.setStatus(status);
-        apply.setRejectReason(rejectReason);
-        apply.setProcessTime(LocalDateTime.now());
-        applyMapper.updateById(apply);
-        
+        User user = getCurrentUser();
+        Apply apply = getApplyOrThrow(applyId);
+
+        validateAuditPermission(user, apply);
+        validateApplyPending(apply);
+
+        updateApplyStatus(apply, status, rejectReason);
+
         if (status.equals(ApplyStatusEnum.APPROVED.getCode())) {
-            ClubMember member = new ClubMember();
-            member.setClubId(apply.getClubId());
-            member.setUserId(apply.getUserId());
-            member.setUserName(apply.getUserName());
-            member.setStatus(StatusEnum.ENABLE.getCode());
-            member.setJoinTime(LocalDateTime.now());
-            clubMemberMapper.insert(member);
-            
-            Club club = clubMapper.selectById(apply.getClubId());
-            club.setMemberCount(club.getMemberCount() + 1);
-            clubMapper.updateById(club);
+            approveApply(apply);
         }
     }
 
@@ -169,59 +128,17 @@ public class ApplyServiceImpl implements ApplyService {
     }
 
     @Override
-    public List<Apply> getMyApplies() {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return applyMapper.selectList(
-            new LambdaQueryWrapper<Apply>()
-                .eq(Apply::getUserId, userId)
-                .orderByDesc(Apply::getCreateTime)
-        );
-    }
-
-    @Override
-    public Page<ClubMember> getClubMembers(Long clubId, Integer current, Integer size) {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userMapper.selectById(userId);
-        
-        // 社长只能查看自己社团的成员
-        if (user.getRole().equals(RoleEnum.PRESIDENT.getCode())) {
-            Club club = clubMapper.selectById(clubId);
-            if (club == null || !club.getPresidentId().equals(userId)) {
-                throw new RuntimeException("只能查看自己社团的成员");
-            }
-        }
-        
-        Page<ClubMember> page = new Page<>(current, size);
-        return clubMemberMapper.selectPage(page,
-            new LambdaQueryWrapper<ClubMember>()
-                .eq(ClubMember::getClubId, clubId)
-                .orderByDesc(ClubMember::getJoinTime)
-        );
-    }
-
-    @Override
     @Transactional
     public void removeMember(Long clubId, Long memberUserId) {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userMapper.selectById(userId);
-        
-        // 社长只能移除自己社团的成员
-        if (user.getRole().equals(RoleEnum.PRESIDENT.getCode())) {
-            Club club = clubMapper.selectById(clubId);
-            if (club == null || !club.getPresidentId().equals(userId)) {
-                throw new RuntimeException("只能移除自己社团的成员");
-            }
-        }
-        
+        validateClubPermission(clubId);
+
         clubMemberMapper.delete(
             new LambdaQueryWrapper<ClubMember>()
                 .eq(ClubMember::getClubId, clubId)
                 .eq(ClubMember::getUserId, memberUserId)
         );
-        
-        Club club = clubMapper.selectById(clubId);
-        club.setMemberCount(Math.max(0, club.getMemberCount() - 1));
-        clubMapper.updateById(club);
+
+        decrementMemberCount(clubId);
     }
 
     @Override
@@ -234,17 +151,174 @@ public class ApplyServiceImpl implements ApplyService {
 
     @Override
     public void cancelApply(Long applyId) {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = getCurrentUserId();
+        Apply apply = getApplyOrThrow(applyId);
+
+        validateApplyOwnership(apply, userId);
+        validateApplyPending(apply);
+
+        applyMapper.deleteById(applyId);
+    }
+
+    // ==================== 私有方法：构建对象 ====================
+
+    private Apply buildApply(User user, Club club, String reason) {
+        Apply apply = new Apply();
+        apply.setClubId(club.getId());
+        apply.setClubName(club.getName());
+        apply.setUserId(user.getId());
+        apply.setUserName(user.getNickname());
+        apply.setReason(reason);
+        apply.setStatus(ApplyStatusEnum.PENDING.getCode());
+        return apply;
+    }
+
+    // ==================== 私有方法：查询构建 ====================
+
+    private LambdaQueryWrapper<Apply> buildPresidentQueryWrapper(Long presidentId, Long clubId) {
+        LambdaQueryWrapper<Apply> wrapper = new LambdaQueryWrapper<>();
+
+        List<Long> myClubIds = clubMapper.selectList(
+            new LambdaQueryWrapper<Club>()
+                .eq(Club::getPresidentId, presidentId)
+                .select(Club::getId)
+        ).stream().map(Club::getId).toList();
+
+        if (myClubIds.isEmpty()) {
+            return wrapper.eq(Apply::getId, -1L); // 返回空结果
+        }
+
+        if (clubId != null) {
+            validateClubBelongsToPresident(myClubIds, clubId);
+            wrapper.eq(Apply::getClubId, clubId);
+        } else {
+            wrapper.in(Apply::getClubId, myClubIds);
+        }
+
+        return wrapper;
+    }
+
+    // ==================== 私有方法：数据获取 ====================
+
+    private Club getClubOrThrow(Long clubId) {
+        Club club = clubMapper.selectById(clubId);
+        if (club == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND);
+        }
+        return club;
+    }
+
+    private Apply getApplyOrThrow(Long applyId) {
         Apply apply = applyMapper.selectById(applyId);
         if (apply == null) {
-            throw new RuntimeException("申请不存在");
+            throw new BusinessException(ErrorCode.APPLY_NOT_FOUND);
         }
+        return apply;
+    }
+
+    // ==================== 私有方法：业务验证 ====================
+
+    private void validateClubActive(Club club) {
+        if (!club.getStatus().equals(ClubStatusEnum.ACTIVE.getCode())) {
+            throw new BusinessException(ErrorCode.CLUB_NOT_ACTIVE);
+        }
+    }
+
+    private void validateNoPendingApply(Long userId, Long clubId) {
+        Long count = applyMapper.selectCount(
+            new LambdaQueryWrapper<Apply>()
+                .eq(Apply::getClubId, clubId)
+                .eq(Apply::getUserId, userId)
+                .eq(Apply::getStatus, ApplyStatusEnum.PENDING.getCode())
+        );
+        if (count > 0) {
+            throw new BusinessException(ErrorCode.APPLY_PENDING_EXISTS);
+        }
+    }
+
+    private void validateNotMember(Long userId, Long clubId) {
+        Long count = clubMemberMapper.selectCount(
+            new LambdaQueryWrapper<ClubMember>()
+                .eq(ClubMember::getClubId, clubId)
+                .eq(ClubMember::getUserId, userId)
+        );
+        if (count > 0) {
+            throw new BusinessException(ErrorCode.ALREADY_MEMBER);
+        }
+    }
+
+    private void validateApplyPending(Apply apply) {
+        if (!apply.getStatus().equals(ApplyStatusEnum.PENDING.getCode())) {
+            throw new BusinessException(ErrorCode.APPLY_ALREADY_PROCESSED);
+        }
+    }
+
+    private void validateAuditPermission(User user, Apply apply) {
+        if (isRole(RoleEnum.PRESIDENT.getCode())) {
+            Club club = clubMapper.selectById(apply.getClubId());
+            if (club == null || !club.getPresidentId().equals(user.getId())) {
+                throw new BusinessException(ErrorCode.NOT_YOUR_CLUB);
+            }
+        }
+    }
+
+    private void validateClubPermission(Long clubId) {
+        if (!isRole(RoleEnum.PRESIDENT.getCode())) {
+            return; // 管理员可以操作所有社团
+        }
+
+        User user = getCurrentUser();
+        Club club = clubMapper.selectById(clubId);
+
+        if (club == null || !club.getPresidentId().equals(user.getId())) {
+            throw new BusinessException(ErrorCode.NOT_YOUR_CLUB);
+        }
+    }
+
+    private void validateClubBelongsToPresident(List<Long> myClubIds, Long clubId) {
+        if (!myClubIds.contains(clubId)) {
+            throw new BusinessException(ErrorCode.NOT_YOUR_CLUB);
+        }
+    }
+
+    private void validateApplyOwnership(Apply apply, Long userId) {
         if (!apply.getUserId().equals(userId)) {
-            throw new RuntimeException("只能取消自己的申请");
+            throw new BusinessException(ErrorCode.NO_PERMISSION);
         }
-        if (apply.getStatus() != 0) {
-            throw new RuntimeException("只能取消待审核的申请");
-        }
-        applyMapper.deleteById(applyId);
+    }
+
+    // ==================== 私有方法：业务操作 ====================
+
+    private void updateApplyStatus(Apply apply, Integer status, String rejectReason) {
+        apply.setStatus(status);
+        apply.setRejectReason(rejectReason);
+        apply.setProcessTime(LocalDateTime.now());
+        applyMapper.updateById(apply);
+    }
+
+    private void approveApply(Apply apply) {
+        // 添加成员
+        ClubMember member = new ClubMember();
+        member.setClubId(apply.getClubId());
+        member.setUserId(apply.getUserId());
+        member.setUserName(apply.getUserName());
+        member.setStatus(StatusEnum.ENABLE.getCode());
+        member.setJoinTime(LocalDateTime.now());
+        clubMemberMapper.insert(member);
+
+        // 更新社团成员数
+        incrementMemberCount(apply.getClubId());
+    }
+
+    private void incrementMemberCount(Long clubId) {
+        Club club = clubMapper.selectById(clubId);
+        club.setMemberCount(club.getMemberCount() + 1);
+        clubMapper.updateById(club);
+    }
+
+    private void decrementMemberCount(Long clubId) {
+        Club club = clubMapper.selectById(clubId);
+        club.setMemberCount(Math.max(0, club.getMemberCount() - 1));
+        clubMapper.updateById(club);
     }
 }

@@ -23,26 +23,26 @@
       </el-form>
 
       <el-table :data="tableData" v-loading="loading" stripe>
-        <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="username" label="用户名" width="120" />
-        <el-table-column prop="nickname" label="用户昵称" width="120" />
-        <el-table-column prop="operation" label="操作名称" width="150" />
-        <el-table-column prop="method" label="请求方法" width="200" show-overflow-tooltip />
-        <el-table-column prop="ip" label="IP地址" width="120" />
-        <el-table-column prop="status" label="状态" width="80">
+        <el-table-column prop="id" label="ID" />
+        <el-table-column prop="username" label="用户名" />
+        <el-table-column prop="nickname" label="用户昵称" />
+        <el-table-column prop="operation" label="操作名称" />
+        <el-table-column prop="method" label="请求方法" show-overflow-tooltip />
+        <el-table-column prop="ip" label="IP地址" />
+        <el-table-column prop="status" label="状态">
           <template #default="{ row }">
             <el-tag :type="row.status === 0 ? 'success' : 'danger'">
               {{ row.status === 0 ? '成功' : '失败' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="executionTime" label="执行时间" width="100">
+        <el-table-column prop="executionTime" label="执行时间">
           <template #default="{ row }">
             {{ row.executionTime }}ms
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width="160" />
-        <el-table-column label="操作" width="100">
+        <el-table-column prop="createTime" label="创建时间" />
+        <el-table-column label="操作">
           <template #default="{ row }">
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
           </template>

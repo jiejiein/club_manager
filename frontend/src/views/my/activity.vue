@@ -432,11 +432,11 @@ onMounted(() => {
           cursor: pointer;
           transition: all 0.3s;
           font-size: 14px;
-          color: #606266;
-          background: #f5f7fa;
+          color: var(--el-text-color-regular);
+          background: var(--el-fill-color-light);
 
           &:hover {
-            background: #e4e7ed;
+            background: var(--el-fill-color);
           }
 
           &.active {
@@ -458,16 +458,17 @@ onMounted(() => {
 
   .activity-list {
     .activity-card {
-      background: #fff;
+      background: var(--el-bg-color);
+      border: 1px solid var(--el-border-color);
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      box-shadow: var(--el-box-shadow-light);
       transition: all 0.3s ease;
       margin-bottom: 20px;
 
       &:hover {
         transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        box-shadow: var(--el-box-shadow);
       }
 
       .card-cover {
@@ -490,13 +491,14 @@ onMounted(() => {
           border-radius: 20px;
           font-size: 12px;
           font-weight: 500;
-          background: rgba(255, 255, 255, 0.95);
+          background: var(--el-bg-color);
+          border: 1px solid var(--el-border-color);
 
-          &.status-0 { color: #909399; }
+          &.status-0 { color: var(--el-text-color-secondary); }
           &.status-1 { color: #e6a23c; }
           &.status-2 { color: #67c23a; }
           &.status-3 { color: #409eff; }
-          &.status-4 { color: #909399; }
+          &.status-4 { color: var(--el-text-color-secondary); }
           &.status-5 { color: #f56c6c; }
         }
       }
@@ -508,7 +510,7 @@ onMounted(() => {
           margin: 0 0 12px;
           font-size: 16px;
           font-weight: 600;
-          color: #303133;
+          color: var(--el-text-color-primary);
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -519,7 +521,7 @@ onMounted(() => {
           align-items: center;
           gap: 6px;
           font-size: 13px;
-          color: #606266;
+          color: var(--el-text-color-regular);
           margin-bottom: 12px;
 
           .el-icon {
@@ -538,7 +540,7 @@ onMounted(() => {
             align-items: center;
             gap: 6px;
             font-size: 13px;
-            color: #909399;
+            color: var(--el-text-color-secondary);
 
             .el-icon {
               font-size: 14px;
@@ -553,7 +555,7 @@ onMounted(() => {
             display: flex;
             justify-content: space-between;
             font-size: 12px;
-            color: #909399;
+            color: var(--el-text-color-secondary);
             margin-bottom: 6px;
           }
         }
@@ -563,7 +565,7 @@ onMounted(() => {
           justify-content: space-between;
           align-items: center;
           padding-top: 12px;
-          border-top: 1px solid #ebeef5;
+          border-top: 1px solid var(--el-border-color-light);
         }
       }
     }

@@ -2,6 +2,9 @@ package com.club.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.club.common.BaseService;
+import com.club.common.BusinessException;
+import com.club.common.ErrorCode;
 import com.club.dto.ActivityDTO;
 import com.club.entity.Activity;
 import com.club.entity.ActivitySignUp;
@@ -15,12 +18,10 @@ import com.club.mapper.ActivityMapper;
 import com.club.mapper.ActivitySignUpMapper;
 import com.club.mapper.ClubMapper;
 import com.club.mapper.ClubMemberMapper;
-import com.club.mapper.UserMapper;
 import com.club.service.ActivityService;
 import com.club.vo.ActivityVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -29,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class ActivityServiceImpl implements ActivityService {
+public class ActivityServiceImpl extends BaseService implements ActivityService {
 
     @Autowired
     private ActivityMapper activityMapper;
@@ -41,15 +42,15 @@ public class ActivityServiceImpl implements ActivityService {
     private ClubMapper clubMapper;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
     private ClubMemberMapper clubMemberMapper;
+
+    // ==================== 查询方法 ====================
 
     @Override
     public Page<ActivityVO> getActivityPage(Integer current, Integer size, String keyword, Long clubId, Integer status) {
         Page<Activity> page = new Page<>(current, size);
         LambdaQueryWrapper<Activity> wrapper = new LambdaQueryWrapper<>();
+        
         if (StringUtils.hasText(keyword)) {
             wrapper.like(Activity::getTitle, keyword);
         }
@@ -60,10 +61,9 @@ public class ActivityServiceImpl implements ActivityService {
             wrapper.eq(Activity::getStatus, status);
         }
         wrapper.orderByDesc(Activity::getCreateTime);
+        
         Page<Activity> activityPage = activityMapper.selectPage(page, wrapper);
-        Page<ActivityVO> voPage = new Page<>(activityPage.getCurrent(), activityPage.getSize(), activityPage.getTotal());
-        voPage.setRecords(activityPage.getRecords().stream().map(this::convertToVO).toList());
-        return voPage;
+        return convertToVOPage(activityPage);
     }
 
     @Override
@@ -73,158 +73,31 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public void createActivity(ActivityDTO dto, Long clubId) {
-        // 验证结束时间不得低于开始时间
-        if (dto.getEndTime() != null && dto.getStartTime() != null 
-            && dto.getEndTime().isBefore(dto.getStartTime())) {
-            throw new RuntimeException("结束时间不能早于开始时间");
-        }
-        
-        // 验证报名截止时间不得低于报名开始时间
-        if (dto.getSignUpEnd() != null && dto.getSignUpStart() != null 
-            && dto.getSignUpEnd().isBefore(dto.getSignUpStart())) {
-            throw new RuntimeException("报名截止时间不能早于报名开始时间");
-        }
-        
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Club club = clubMapper.selectById(clubId);
-        
-        if (!club.getPresidentId().equals(userId)) {
-            throw new RuntimeException("无权限创建活动");
-        }
-        
-        Activity activity = new Activity();
-        BeanUtils.copyProperties(Objects.requireNonNull(dto), activity);
-        activity.setClubId(clubId);
-        activity.setClubName(club.getName());
-        activity.setCurrentParticipants(0);
-        activity.setStatus(ActivityStatusEnum.PENDING.getCode());
-        activityMapper.insert(activity);
-    }
-
-    @Override
-    public void updateActivity(ActivityDTO dto) {
-        // 验证结束时间不得低于开始时间
-        if (dto.getEndTime() != null && dto.getStartTime() != null 
-            && dto.getEndTime().isBefore(dto.getStartTime())) {
-            throw new RuntimeException("结束时间不能早于开始时间");
-        }
-        
-        // 验证报名截止时间不得低于报名开始时间
-        if (dto.getSignUpEnd() != null && dto.getSignUpStart() != null 
-            && dto.getSignUpEnd().isBefore(dto.getSignUpStart())) {
-            throw new RuntimeException("报名截止时间不能早于报名开始时间");
-        }
-        
-        Activity activity = new Activity();
-        BeanUtils.copyProperties(Objects.requireNonNull(dto), activity);
-        activityMapper.updateById(activity);
-    }
-
-    @Override
-    public void deleteActivity(Long id) {
-        // 直接删除活动记录，不保留状态
-        activityMapper.deleteById(id);
-    }
-
-    @Override
-    public void auditActivity(Long id, Integer status, String rejectReason) {
-        // 获取当前登录用户
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userMapper.selectById(userId);
-        
-        // 只有管理员可以审核活动
-        if (!user.getRole().equals(RoleEnum.ADMIN.getCode())) {
-            throw new RuntimeException("只有管理员可以审核活动");
-        }
-        
-        Activity activity = new Activity();
-        activity.setId(id);
-        activity.setStatus(status);
-        activity.setRejectReason(rejectReason);
-        activityMapper.updateById(activity);
-    }
-
-    @Override
-    public void signUpActivity(Long activityId) {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userMapper.selectById(userId);
-        Activity activity = activityMapper.selectById(activityId);
-        
-        // 只有已发布的活动才能报名
-        if (!activity.getStatus().equals(ActivityStatusEnum.PUBLISHED.getCode())) {
-            throw new RuntimeException("活动未开放报名");
-        }
-        if (activity.getCurrentParticipants() >= activity.getMaxParticipants()) {
-            throw new RuntimeException("报名人数已满");
-        }
-        if (LocalDateTime.now().isAfter(activity.getSignUpEnd())) {
-            throw new RuntimeException("报名已截止");
-        }
-        
-        // 检查用户是否是该社团的成员
-        Long memberCount = clubMemberMapper.selectCount(
-            new LambdaQueryWrapper<ClubMember>()
-                .eq(ClubMember::getClubId, activity.getClubId())
-                .eq(ClubMember::getUserId, userId)
-                .eq(ClubMember::getStatus, 1) // 状态为1表示已加入
-        );
-        if (memberCount == 0) {
-            throw new RuntimeException("只有社团成员才能报名该活动");
-        }
-        
-        Long count = signUpMapper.selectCount(
+    public List<ActivityVO> getMyActivities() {
+        Long userId = getCurrentUserId();
+        List<Long> activityIds = signUpMapper.selectList(
             new LambdaQueryWrapper<ActivitySignUp>()
-                .eq(ActivitySignUp::getActivityId, activityId)
                 .eq(ActivitySignUp::getUserId, userId)
-        );
-        if (count > 0) {
-            throw new RuntimeException("已报名该活动");
+                .select(ActivitySignUp::getActivityId)
+        ).stream().map(ActivitySignUp::getActivityId).toList();
+        
+        if (activityIds.isEmpty()) {
+            return List.of();
         }
         
-        ActivitySignUp signUp = new ActivitySignUp();
-        signUp.setActivityId(activityId);
-        signUp.setUserId(userId);
-        signUp.setUserName(user.getNickname());
-        signUp.setStatus(ApplyStatusEnum.PENDING.getCode());
-        signUp.setSignUpTime(LocalDateTime.now());
-        signUp.setChecked(0);
-        signUpMapper.insert(signUp);
-        
-        activity.setCurrentParticipants(activity.getCurrentParticipants() + 1);
-        activityMapper.updateById(activity);
+        return activityMapper.selectList(
+            new LambdaQueryWrapper<Activity>()
+                .in(Activity::getId, activityIds)
+        ).stream().map(this::convertToVO).toList();
     }
 
     @Override
-    public void cancelSignUp(Long activityId) {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Activity activity = activityMapper.selectById(activityId);
-        
-        signUpMapper.delete(
-            new LambdaQueryWrapper<ActivitySignUp>()
-                .eq(ActivitySignUp::getActivityId, activityId)
-                .eq(ActivitySignUp::getUserId, userId)
-        );
-        
-        activity.setCurrentParticipants(Math.max(0, activity.getCurrentParticipants() - 1));
-        activityMapper.updateById(activity);
-    }
-
-    @Override
-    public void auditSignUp(Long signUpId, Integer status) {
-        ActivitySignUp signUp = new ActivitySignUp();
-        signUp.setId(signUpId);
-        signUp.setStatus(status);
-        signUpMapper.updateById(signUp);
-    }
-
-    @Override
-    public void checkIn(Long signUpId) {
-        ActivitySignUp signUp = new ActivitySignUp();
-        signUp.setId(signUpId);
-        signUp.setChecked(1);
-        signUp.setCheckInTime(LocalDateTime.now());
-        signUpMapper.updateById(signUp);
+    public List<ActivityVO> getAvailableActivities() {
+        return activityMapper.selectList(
+            new LambdaQueryWrapper<Activity>()
+                .in(Activity::getStatus, 2, 3)
+                .orderByDesc(Activity::getCreateTime)
+        ).stream().map(this::convertToVO).toList();
     }
 
     @Override
@@ -237,32 +110,91 @@ public class ActivityServiceImpl implements ActivityService {
         );
     }
 
+    // ==================== 创建/更新方法 ====================
+
     @Override
-    public List<ActivityVO> getMyActivities() {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Long> activityIds = signUpMapper.selectList(
-            new LambdaQueryWrapper<ActivitySignUp>()
-                .eq(ActivitySignUp::getUserId, userId)
-                .select(ActivitySignUp::getActivityId)
-        ).stream().map(ActivitySignUp::getActivityId).toList();
+    public void createActivity(ActivityDTO dto, Long clubId) {
+        validateActivityTime(dto);
         
-        if (activityIds.isEmpty()) {
-            return List.of();
-        }
-        return activityMapper.selectList(
-            new LambdaQueryWrapper<Activity>()
-                .in(Activity::getId, activityIds)
-        ).stream().map(this::convertToVO).toList();
+        User user = getCurrentUser();
+        Club club = getClubByIdOrThrow(clubId);
+        
+        validatePresidentPermission(club, user.getId());
+        
+        Activity activity = buildActivity(dto, club);
+        activityMapper.insert(activity);
     }
 
     @Override
-    public List<ActivityVO> getAvailableActivities() {
-        // 获取已发布和进行中的活动
-        return activityMapper.selectList(
-            new LambdaQueryWrapper<Activity>()
-                .in(Activity::getStatus, 2, 3)  // 已发布和进行中
-                .orderByDesc(Activity::getCreateTime)
-        ).stream().map(this::convertToVO).toList();
+    public void updateActivity(ActivityDTO dto) {
+        validateActivityTime(dto);
+        
+        Activity activity = new Activity();
+        BeanUtils.copyProperties(Objects.requireNonNull(dto), activity);
+        activityMapper.updateById(activity);
+    }
+
+    @Override
+    public void deleteActivity(Long id) {
+        activityMapper.deleteById(id);
+    }
+
+    // ==================== 审核方法 ====================
+
+    @Override
+    public void auditActivity(Long id, Integer status, String rejectReason) {
+        validateAdminPermission();
+        
+        Activity activity = new Activity();
+        activity.setId(id);
+        activity.setStatus(status);
+        activity.setRejectReason(rejectReason);
+        activityMapper.updateById(activity);
+    }
+
+    @Override
+    public void auditSignUp(Long signUpId, Integer status) {
+        ActivitySignUp signUp = new ActivitySignUp();
+        signUp.setId(signUpId);
+        signUp.setStatus(status);
+        signUpMapper.updateById(signUp);
+    }
+
+    // ==================== 报名相关方法 ====================
+
+    @Override
+    public void signUpActivity(Long activityId) {
+        User user = getCurrentUser();
+        Activity activity = getActivityByIdOrThrow(activityId);
+        
+        validateCanSignUp(activity, user.getId());
+        
+        createSignUpRecord(activityId, user);
+        updateActivityParticipants(activity);
+    }
+
+    @Override
+    public void cancelSignUp(Long activityId) {
+        Long userId = getCurrentUserId();
+        Activity activity = getActivityByIdOrThrow(activityId);
+        
+        signUpMapper.delete(
+            new LambdaQueryWrapper<ActivitySignUp>()
+                .eq(ActivitySignUp::getActivityId, activityId)
+                .eq(ActivitySignUp::getUserId, userId)
+        );
+        
+        activity.setCurrentParticipants(Math.max(0, activity.getCurrentParticipants() - 1));
+        activityMapper.updateById(activity);
+    }
+
+    @Override
+    public void checkIn(Long signUpId) {
+        ActivitySignUp signUp = new ActivitySignUp();
+        signUp.setId(signUpId);
+        signUp.setChecked(1);
+        signUp.setCheckInTime(LocalDateTime.now());
+        signUpMapper.updateById(signUp);
     }
 
     @Override
@@ -272,6 +204,135 @@ public class ActivityServiceImpl implements ActivityService {
         signUp.setRating(rating);
         signUp.setComment(comment);
         signUpMapper.updateById(signUp);
+    }
+
+    // ==================== 私有验证方法 ====================
+
+    private void validateActivityTime(ActivityDTO dto) {
+        if (dto.getEndTime() != null && dto.getStartTime() != null 
+            && dto.getEndTime().isBefore(dto.getStartTime())) {
+            throw new BusinessException(ErrorCode.ACTIVITY_TIME_INVALID);
+        }
+        
+        if (dto.getSignUpEnd() != null && dto.getSignUpStart() != null 
+            && dto.getSignUpEnd().isBefore(dto.getSignUpStart())) {
+            throw new BusinessException(ErrorCode.ACTIVITY_SIGN_UP_TIME_INVALID);
+        }
+    }
+
+    private void validatePresidentPermission(Club club, Long userId) {
+        if (!club.getPresidentId().equals(userId)) {
+            throw new BusinessException(ErrorCode.NO_PERMISSION_CREATE_ACTIVITY);
+        }
+    }
+
+    private void validateAdminPermission() {
+        User user = getCurrentUser();
+        if (!user.getRole().equals(RoleEnum.ADMIN.getCode())) {
+            throw new BusinessException(ErrorCode.NO_PERMISSION_AUDIT_ACTIVITY);
+        }
+    }
+
+    private void validateCanSignUp(Activity activity, Long userId) {
+        // 检查活动是否已发布
+        if (!activity.getStatus().equals(ActivityStatusEnum.PUBLISHED.getCode())) {
+            throw new BusinessException(ErrorCode.ACTIVITY_NOT_PUBLISHED);
+        }
+        
+        // 检查报名人数
+        if (activity.getCurrentParticipants() >= activity.getMaxParticipants()) {
+            throw new BusinessException(ErrorCode.ACTIVITY_FULL);
+        }
+        
+        // 检查报名时间
+        if (LocalDateTime.now().isAfter(activity.getSignUpEnd())) {
+            throw new BusinessException(ErrorCode.ACTIVITY_SIGN_UP_ENDED);
+        }
+        
+        // 检查是否是社团成员
+        validateIsClubMember(activity.getClubId(), userId);
+        
+        // 检查是否已报名
+        validateNotAlreadySignUp(activity.getId(), userId);
+    }
+
+    private void validateIsClubMember(Long clubId, Long userId) {
+        Long memberCount = clubMemberMapper.selectCount(
+            new LambdaQueryWrapper<ClubMember>()
+                .eq(ClubMember::getClubId, clubId)
+                .eq(ClubMember::getUserId, userId)
+                .eq(ClubMember::getStatus, 1)
+        );
+        if (memberCount == 0) {
+            throw new BusinessException(ErrorCode.ACTIVITY_NOT_MEMBER);
+        }
+    }
+
+    private void validateNotAlreadySignUp(Long activityId, Long userId) {
+        Long count = signUpMapper.selectCount(
+            new LambdaQueryWrapper<ActivitySignUp>()
+                .eq(ActivitySignUp::getActivityId, activityId)
+                .eq(ActivitySignUp::getUserId, userId)
+        );
+        if (count > 0) {
+            throw new BusinessException(ErrorCode.ACTIVITY_ALREADY_SIGN_UP);
+        }
+    }
+
+    // ==================== 私有工具方法 ====================
+
+    private Club getClubByIdOrThrow(Long clubId) {
+        Club club = clubMapper.selectById(clubId);
+        if (club == null) {
+            throw new BusinessException(ErrorCode.CLUB_NOT_FOUND);
+        }
+        return club;
+    }
+
+    private Activity getActivityByIdOrThrow(Long activityId) {
+        Activity activity = activityMapper.selectById(activityId);
+        if (activity == null) {
+            throw new BusinessException(ErrorCode.ACTIVITY_NOT_FOUND);
+        }
+        return activity;
+    }
+
+    private Activity buildActivity(ActivityDTO dto, Club club) {
+        Activity activity = new Activity();
+        BeanUtils.copyProperties(Objects.requireNonNull(dto), activity);
+        activity.setClubId(club.getId());
+        activity.setClubName(club.getName());
+        activity.setCurrentParticipants(0);
+        activity.setStatus(ActivityStatusEnum.PENDING.getCode());
+        return activity;
+    }
+
+    private void createSignUpRecord(Long activityId, User user) {
+        ActivitySignUp signUp = new ActivitySignUp();
+        signUp.setActivityId(activityId);
+        signUp.setUserId(user.getId());
+        signUp.setUserName(user.getNickname());
+        signUp.setStatus(ApplyStatusEnum.PENDING.getCode());
+        signUp.setSignUpTime(LocalDateTime.now());
+        signUp.setChecked(0);
+        signUpMapper.insert(signUp);
+    }
+
+    private void updateActivityParticipants(Activity activity) {
+        activity.setCurrentParticipants(activity.getCurrentParticipants() + 1);
+        activityMapper.updateById(activity);
+    }
+
+    private Page<ActivityVO> convertToVOPage(Page<Activity> activityPage) {
+        Page<ActivityVO> voPage = new Page<>(
+            activityPage.getCurrent(), 
+            activityPage.getSize(), 
+            activityPage.getTotal()
+        );
+        voPage.setRecords(activityPage.getRecords().stream()
+            .map(this::convertToVO)
+            .toList());
+        return voPage;
     }
 
     private ActivityVO convertToVO(Activity activity) {

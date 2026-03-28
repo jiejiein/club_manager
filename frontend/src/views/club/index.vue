@@ -4,7 +4,7 @@
       <template #header>
         <div class="card-header">
           <span>社团列表</span>
-          <el-button type="primary" @click="handleAdd">创建社团</el-button>
+          <el-button v-if="isUser()" type="primary" @click="handleAdd">创建社团</el-button>
         </div>
       </template>
 
@@ -37,20 +37,24 @@
         <el-table-column prop="memberCount" label="成员数" />
         <el-table-column prop="status" label="状态">
           <template #default="{ row }">
-            <el-tag :type="row.status === 1 ? 'success' : row.status === 0 ? 'warning' : 'danger'">
+            <el-tag
+              :type="row.status === 1 ? 'success' : row.status === 0 ? 'warning' : 'danger'"
+              size="large"
+              style="width: 80px; text-align: center; justify-content: center;"
+            >
               {{ row.statusName }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="180" />
-        <el-table-column label="操作" width="280">
+        <el-table-column label="操作" width="300">
           <template #default="{ row }">
-            <el-button v-if="isCurrentUserPresident(row)" type="primary" link @click="handleEdit(row)">编辑</el-button>
+            <el-button v-if="isAdmin() || isCurrentUserPresident(row)" type="primary" link @click="handleEdit(row)">编辑</el-button>
             <el-button type="success" link @click="handleMembers(row)">成员</el-button>
             <el-button v-if="row.status === 0" type="warning" link @click="handleAudit(row, 1)">审核通过</el-button>
             <el-button v-if="row.status === 0" type="danger" link @click="handleAudit(row, 2)">拒绝</el-button>
-            <el-button v-if="isCurrentUserPresident(row)" type="danger" link @click="handleQuit(row)">申请退社</el-button>
-            <el-button v-if="isAdmin()" type="danger" link @click="handleDelete(row)">删除</el-button>
+            <el-button v-if="isCurrentUserPresident(row) && !isAdmin() && !isPresidentRole()" type="danger" link @click="handleQuit(row)">申请退社</el-button>
+            <el-button v-if="isAdmin() && row.status !== 0" type="danger" link @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -61,8 +65,8 @@
         :total="pagination.total"
         :page-sizes="[10, 20, 50]"
         layout="total, sizes, prev, pager, next"
-        @size-change="loadData"
-        @current-change="loadData"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
         style="margin-top: 20px; justify-content: flex-end"
       />
     </el-card>
@@ -93,38 +97,61 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { usePagination } from '@/composables/usePagination'
 import { getClubPage, createClub, updateClub, deleteClub, auditClub, getAllClubTypes, quitClub } from '@/api/club'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const router = useRouter()
 const userStore = useUserStore()
-const loading = ref(false)
-const tableData = ref([])
-const clubTypes = ref([])
-const dialogVisible = ref(false)
-const formRef = ref(null)
 
-// 检查当前用户是否是社团社长
-const isCurrentUserPresident = (row) => {
-  return userStore.userInfo?.id === row.presidentId
-}
+// 权限检查
+const isCurrentUserPresident = (row) => userStore.userInfo?.id === row.presidentId
+const isAdmin = () => userStore.userInfo?.role === 1
+const isUser = () => userStore.userInfo?.role === 3
+const isPresidentRole = () => userStore.userInfo?.role === 2
 
-// 检查当前用户是否是管理员
-const isAdmin = () => {
-  return userStore.userInfo?.role === 1
-}
-
+// 搜索表单
 const searchForm = reactive({
   keyword: '',
   typeId: null,
   status: null
 })
 
-const pagination = reactive({
-  current: 1,
-  size: 10,
-  total: 0
-})
+const handleSearch = () => {
+  pagination.current = 1
+  loadData()
+}
+
+// 分页和数据
+const {
+  loading,
+  tableData,
+  pagination,
+  loadData,
+  handleSizeChange,
+  handleCurrentChange
+} = usePagination(async (params) => {
+  return await getClubPage({
+    ...params,
+    ...searchForm
+  })
+}, { immediate: true })
+
+// 社团类型
+const clubTypes = ref([])
+
+const loadClubTypes = async () => {
+  try {
+    const res = await getAllClubTypes()
+    clubTypes.value = res.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+// 弹窗和表单
+const dialogVisible = ref(false)
+const formRef = ref(null)
 
 const form = reactive({
   id: null,
@@ -136,37 +163,6 @@ const form = reactive({
 const rules = {
   name: [{ required: true, message: '请输入社团名称', trigger: 'blur' }],
   typeId: [{ required: true, message: '请选择类型', trigger: 'change' }]
-}
-
-const loadData = async () => {
-  loading.value = true
-  try {
-    const res = await getClubPage({
-      current: pagination.current,
-      size: pagination.size,
-      ...searchForm
-    })
-    tableData.value = res.data.records
-    pagination.total = res.data.total
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
-  }
-}
-
-const loadClubTypes = async () => {
-  try {
-    const res = await getAllClubTypes()
-    clubTypes.value = res.data
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const handleSearch = () => {
-  pagination.current = 1
-  loadData()
 }
 
 const handleAdd = () => {
@@ -234,7 +230,6 @@ const handleMembers = (row) => {
   router.push(`/club-member/${row.id}`)
 }
 
-// 处理申请退社
 const handleQuit = (row) => {
   ElMessageBox.confirm('确定要申请退社吗？', '提示', {
     confirmButtonText: '确定',
@@ -252,7 +247,6 @@ const handleQuit = (row) => {
 }
 
 onMounted(() => {
-  loadData()
   loadClubTypes()
 })
 </script>

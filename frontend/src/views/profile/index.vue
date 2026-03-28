@@ -199,7 +199,7 @@ onMounted(() => {
       gap: 20px;
       margin-bottom: 30px;
       padding-bottom: 20px;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--el-border-color-light);
       
       .user-details {
         h3 {
@@ -212,27 +212,12 @@ onMounted(() => {
     
     .info-table {
       margin-bottom: 20px;
-      
-      :deep(.el-table) {
-        border-radius: 8px;
-        overflow: hidden;
-        
-        .el-table__header-wrapper th {
-          background-color: #f8fafc;
-        }
-        
-        .el-table__body-wrapper {
-          .el-table__row:nth-child(odd) {
-            background-color: #f8fafc;
-          }
-        }
-      }
     }
     
     .edit-form {
       margin-top: 20px;
       padding: 20px;
-      background-color: #f8fafc;
+      background-color: var(--el-fill-color-light);
       border-radius: 8px;
     }
   }
@@ -240,21 +225,21 @@ onMounted(() => {
   .notification-list {
     .notification-item {
       padding: 12px 0;
-      border-bottom: 1px solid #e2e8f0;
-      
+      border-bottom: 1px solid var(--el-border-color-light);
+
       &:last-child {
         border-bottom: none;
       }
-      
+
       .notification-date {
         font-size: 12px;
-        color: #94a3b8;
+        color: var(--el-text-color-secondary);
         margin-bottom: 6px;
       }
-      
+
       .notification-content {
         font-size: 14px;
-        color: #475569;
+        color: var(--el-text-color-regular);
         line-height: 1.4;
       }
     }

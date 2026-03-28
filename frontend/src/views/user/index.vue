@@ -60,8 +60,8 @@
         :total="pagination.total"
         :page-sizes="[10, 20, 50]"
         layout="total, sizes, prev, pager, next"
-        @size-change="loadData"
-        @current-change="loadData"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
         style="margin-top: 20px; justify-content: flex-end"
       />
     </el-card>
@@ -69,46 +69,37 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { reactive, onMounted } from 'vue'
+import { usePagination } from '@/composables/usePagination'
 import { getUserPage, updateUserStatus, resetPassword } from '@/api/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-const loading = ref(false)
-const tableData = ref([])
-
+// 搜索表单
 const searchForm = reactive({
   keyword: '',
   role: null,
   status: null
 })
 
-const pagination = reactive({
-  current: 1,
-  size: 10,
-  total: 0
-})
-
-const loadData = async () => {
-  loading.value = true
-  try {
-    const res = await getUserPage({
-      current: pagination.current,
-      size: pagination.size,
-      ...searchForm
-    })
-    tableData.value = res.data.records
-    pagination.total = res.data.total
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
-  }
-}
-
 const handleSearch = () => {
   pagination.current = 1
   loadData()
 }
+
+// 分页和数据
+const {
+  loading,
+  tableData,
+  pagination,
+  loadData,
+  handleSizeChange,
+  handleCurrentChange
+} = usePagination(async (params) => {
+  return await getUserPage({
+    ...params,
+    ...searchForm
+  })
+}, { immediate: true })
 
 const handleStatusChange = async (row) => {
   try {
@@ -130,10 +121,6 @@ const handleResetPassword = (row) => {
     ElMessage.success('密码重置成功')
   })
 }
-
-onMounted(() => {
-  loadData()
-})
 </script>
 
 <style lang="scss" scoped>

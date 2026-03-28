@@ -443,18 +443,18 @@ onMounted(() => {
   }
 
   .club-card {
-    background: #fff;
+    background: var(--el-bg-color);
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--el-box-shadow-light);
     transition: all 0.3s ease;
     border-top: 4px solid transparent;
     border-image: var(--card-color) 1;
 
     &:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      box-shadow: var(--el-box-shadow);
     }
 
     .card-header {
@@ -476,10 +476,10 @@ onMounted(() => {
 
       .club-badge {
         padding: 4px 12px;
-        background: #f0f2f5;
+        background: var(--el-fill-color-light);
         border-radius: 20px;
         font-size: 12px;
-        color: #606266;
+        color: var(--el-text-color-regular);
       }
     }
 
@@ -487,13 +487,13 @@ onMounted(() => {
       margin: 0 0 8px;
       font-size: 18px;
       font-weight: 600;
-      color: #303133;
+      color: var(--el-text-color-primary);
     }
 
     .club-desc {
       margin: 0 0 16px;
       font-size: 14px;
-      color: #909399;
+      color: var(--el-text-color-secondary);
       line-height: 1.5;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -513,7 +513,7 @@ onMounted(() => {
         align-items: center;
         gap: 6px;
         font-size: 13px;
-        color: #606266;
+        color: var(--el-text-color-regular);
 
         .el-icon {
           color: var(--el-color-primary);
@@ -526,12 +526,12 @@ onMounted(() => {
       justify-content: space-between;
       align-items: center;
       padding-top: 16px;
-      border-top: 1px solid #ebeef5;
+      border-top: 1px solid var(--el-border-color-light);
     }
   }
 
   .apply-form-wrapper {
-    background: #f8f9fa;
+    background: var(--el-fill-color-light);
     border-radius: 8px;
     padding: 24px;
     margin-bottom: 24px;
@@ -543,18 +543,18 @@ onMounted(() => {
 
       .club-name {
         font-size: 14px;
-        color: #303133;
+        color: var(--el-text-color-primary);
         font-weight: 500;
       }
 
       .club-divider {
-        color: #dcdfe6;
+        color: var(--el-border-color);
         margin: 0 10px;
       }
 
       .club-type {
         font-size: 12px;
-        color: #909399;
+        color: var(--el-text-color-secondary);
       }
     }
   }
@@ -563,7 +563,7 @@ onMounted(() => {
     h4 {
       margin: 0 0 16px;
       font-size: 16px;
-      color: #303133;
+      color: var(--el-text-color-primary);
     }
 
     .reject-reason {
@@ -571,7 +571,7 @@ onMounted(() => {
     }
 
     .text-gray {
-      color: #c0c4cc;
+      color: var(--el-text-color-placeholder);
     }
   }
 
@@ -605,13 +605,13 @@ onMounted(() => {
       h4 {
         margin: 0 0 12px;
         font-size: 14px;
-        color: #606266;
+        color: var(--el-text-color-regular);
       }
 
       p {
         margin: 0;
         line-height: 1.8;
-        color: #303133;
+        color: var(--el-text-color-primary);
       }
     }
   }

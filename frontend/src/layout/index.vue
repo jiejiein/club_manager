@@ -192,7 +192,7 @@ onUnmounted(() => {
 /* 整体布局容器：占满整个视口高度 */
 .layout-container {
   height: 100vh;
-  background: #f8fafc;
+  background: var(--el-bg-color-page);
 }
 
 /* 右侧区域容器：垂直排列（顶部导航 + 主内容） */
@@ -205,11 +205,11 @@ onUnmounted(() => {
 .main {
   flex: 1;
   padding: 0;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: var(--el-bg-color-page);
   overflow: hidden;
   position: relative;
 
-  /* 顶部装饰性渐变背景 */
+  /* 顶部装饰性渐变背景 - 夜间模式下更暗 */
   &::before {
     content: '';
     position: absolute;
@@ -217,7 +217,7 @@ onUnmounted(() => {
     left: 0;
     right: 0;
     height: 300px;
-    background: linear-gradient(180deg, rgba(102, 126, 234, 0.03) 0%, transparent 100%);
+    background: linear-gradient(180deg, var(--el-color-primary-light-9) 0%, transparent 100%);
     pointer-events: none;
   }
 }

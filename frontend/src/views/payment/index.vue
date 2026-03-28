@@ -52,8 +52,8 @@
         :total="pagination.total"
         :page-sizes="[10, 20, 50]"
         layout="total, sizes, prev, pager, next"
-        @size-change="loadData"
-        @current-change="loadData"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
         style="margin-top: 20px; justify-content: flex-end"
       />
     </el-card>
@@ -89,26 +89,53 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { usePagination } from '@/composables/usePagination'
 import { getPaymentPage, createPayment, deletePayment } from '@/api/payment'
 import { getMyClubs } from '@/api/club'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const router = useRouter()
-const loading = ref(false)
-const tableData = ref([])
-const myClubs = ref([])
-const dialogVisible = ref(false)
-const formRef = ref(null)
 
+// 搜索表单
 const searchForm = reactive({
   status: null
 })
 
-const pagination = reactive({
-  current: 1,
-  size: 10,
-  total: 0
-})
+const handleSearch = () => {
+  pagination.current = 1
+  loadData()
+}
+
+// 分页和数据
+const {
+  loading,
+  tableData,
+  pagination,
+  loadData,
+  handleSizeChange,
+  handleCurrentChange
+} = usePagination(async (params) => {
+  return await getPaymentPage({
+    ...params,
+    ...searchForm
+  })
+}, { immediate: true })
+
+// 我的社团列表
+const myClubs = ref([])
+
+const loadMyClubs = async () => {
+  try {
+    const res = await getMyClubs()
+    myClubs.value = res.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+// 弹窗和表单
+const dialogVisible = ref(false)
+const formRef = ref(null)
 
 const form = reactive({
   clubId: null,
@@ -123,37 +150,6 @@ const rules = {
   title: [{ required: true, message: '请输入缴费标题', trigger: 'blur' }],
   amount: [{ required: true, message: '请输入金额', trigger: 'blur' }],
   deadline: [{ required: true, message: '请选择截止日期', trigger: 'change' }]
-}
-
-const loadData = async () => {
-  loading.value = true
-  try {
-    const res = await getPaymentPage({
-      current: pagination.current,
-      size: pagination.size,
-      ...searchForm
-    })
-    tableData.value = res.data.records
-    pagination.total = res.data.total
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
-  }
-}
-
-const loadMyClubs = async () => {
-  try {
-    const res = await getMyClubs()
-    myClubs.value = res.data
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const handleSearch = () => {
-  pagination.current = 1
-  loadData()
 }
 
 const handleAdd = () => {
@@ -190,7 +186,6 @@ const handleRecords = (row) => {
 }
 
 onMounted(() => {
-  loadData()
   loadMyClubs()
 })
 </script>

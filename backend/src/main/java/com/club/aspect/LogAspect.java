@@ -2,6 +2,8 @@ package com.club.aspect;
 
 import com.club.annotation.Log;
 import com.club.entity.SystemLog;
+import com.club.entity.User;
+import com.club.mapper.UserMapper;
 import com.club.service.SystemLogService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -24,6 +26,9 @@ public class LogAspect {
 
     @Autowired
     private SystemLogService logService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Pointcut("@annotation(com.club.annotation.Log)")
     public void logPointCut() {}
@@ -57,6 +62,16 @@ public class LogAspect {
             if (principal instanceof Long) {
                 Long userId = (Long) principal;
                 sysLog.setUserId(userId);
+                // 查询用户信息
+                try {
+                    User user = userMapper.selectById(userId);
+                    if (user != null) {
+                        sysLog.setUsername(user.getUsername());
+                        sysLog.setNickname(user.getNickname());
+                    }
+                } catch (Exception e) {
+                    // 查询失败不影响日志记录
+                }
             }
         } catch (Exception e) {
             sysLog.setUserId(null);

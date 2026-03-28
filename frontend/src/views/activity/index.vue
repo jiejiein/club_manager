@@ -62,8 +62,8 @@
         :total="pagination.total"
         :page-sizes="[10, 20, 50]"
         layout="total, sizes, prev, pager, next"
-        @size-change="loadData"
-        @current-change="loadData"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
         style="margin-top: 20px; justify-content: flex-end"
       />
     </el-card>
@@ -109,32 +109,71 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { usePagination } from '@/composables/usePagination'
 import { getActivityPage, createActivity, updateActivity, deleteActivity, auditActivity } from '@/api/activity'
 import { getMyClubs } from '@/api/club'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const userStore = useUserStore()
-
 const router = useRouter()
-const loading = ref(false)
-const tableData = ref([])
-const myClubs = ref([])
-const dialogVisible = ref(false)
-const formRef = ref(null)
 
+// 权限控制
+const isAdmin = computed(() => userStore.userInfo?.role === 1)
+const isPresident = computed(() => userStore.userInfo?.role === 2)
+
+// 检查是否是活动所属社团的社长
+const isActivityOwner = computed(() => (row) => {
+  if (isAdmin.value) return true
+  if (isPresident.value) {
+    return myClubs.value.some(club => club.id === row.clubId)
+  }
+  return false
+})
+
+// 搜索表单
 const searchForm = reactive({
   keyword: '',
   status: null
 })
 
-const pagination = reactive({
-  current: 1,
-  size: 10,
-  total: 0
-})
+const handleSearch = () => {
+  pagination.current = 1
+  loadData()
+}
+
+// 分页和数据
+const {
+  loading,
+  tableData,
+  pagination,
+  loadData,
+  handleSizeChange,
+  handleCurrentChange
+} = usePagination(async (params) => {
+  return await getActivityPage({
+    ...params,
+    ...searchForm
+  })
+}, { immediate: true })
+
+// 我的社团列表
+const myClubs = ref([])
+
+const loadMyClubs = async () => {
+  try {
+    const res = await getMyClubs()
+    myClubs.value = res.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+// 弹窗和表单
+const dialogVisible = ref(false)
+const formRef = ref(null)
 
 const form = reactive({
   id: null,
@@ -160,62 +199,9 @@ const rules = {
   maxParticipants: [{ required: true, message: '请输入最大人数', trigger: 'blur' }]
 }
 
-// 权限控制
-const isAdmin = computed(() => {
-  return userStore.userInfo?.role === 1
-})
-
-const isPresident = computed(() => {
-  return userStore.userInfo?.role === 2
-})
-
-// 检查是否是活动所属社团的社长
-const isActivityOwner = computed(() => {
-  return (row) => {
-    // 管理员可以操作所有活动
-    if (isAdmin.value) return true
-    // 社长只能操作自己社团的活动
-    if (isPresident.value) {
-      return myClubs.value.some(club => club.id === row.clubId)
-    }
-    return false
-  }
-})
-
 const getStatusType = (status) => {
   const types = { 1: 'warning', 2: 'success', 3: 'primary', 4: 'info', 5: 'danger' }
   return types[status] || ''
-}
-
-const loadData = async () => {
-  loading.value = true
-  try {
-    const res = await getActivityPage({
-      current: pagination.current,
-      size: pagination.size,
-      ...searchForm
-    })
-    tableData.value = res.data.records
-    pagination.total = res.data.total
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
-  }
-}
-
-const loadMyClubs = async () => {
-  try {
-    const res = await getMyClubs()
-    myClubs.value = res.data
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const handleSearch = () => {
-  pagination.current = 1
-  loadData()
 }
 
 const handleAdd = () => {
@@ -280,7 +266,6 @@ const handleSignList = (row) => {
 }
 
 onMounted(() => {
-  loadData()
   loadMyClubs()
 })
 </script>

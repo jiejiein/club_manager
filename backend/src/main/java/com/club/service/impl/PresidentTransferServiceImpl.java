@@ -126,13 +126,49 @@ public class PresidentTransferServiceImpl implements PresidentTransferService {
         transfer.setProcessTime(LocalDateTime.now());
         transferMapper.updateById(transfer);
         
-        // 如果审核通过，更新社团的社长信息
+        // 如果审核通过，更新社团的社长信息和用户角色
         if (status.equals(PresidentTransferStatusEnum.APPROVED.getCode())) {
             Club club = clubMapper.selectById(transfer.getClubId());
             if (club != null) {
+                // 更新社团社长信息
                 club.setPresidentId(transfer.getNewPresidentId());
                 club.setPresidentName(transfer.getNewPresidentName());
                 clubMapper.updateById(club);
+
+                // 更新新社长角色为社长
+                User newPresident = userMapper.selectById(transfer.getNewPresidentId());
+                if (newPresident != null && !newPresident.getRole().equals(RoleEnum.PRESIDENT.getCode())) {
+                    newPresident.setRole(RoleEnum.PRESIDENT.getCode());
+                    userMapper.updateById(newPresident);
+                }
+
+                // 更新原社长角色（如果原社长没有其他社团）
+                User oldPresident = userMapper.selectById(transfer.getCurrentPresidentId());
+                if (oldPresident != null && oldPresident.getRole().equals(RoleEnum.PRESIDENT.getCode())) {
+                    // 检查原社长是否还是其他社团的社长
+                    Long otherClubCount = clubMapper.selectCount(
+                        new LambdaQueryWrapper<Club>()
+                            .eq(Club::getPresidentId, transfer.getCurrentPresidentId())
+                    );
+                    // 如果原社长没有其他社团了，降级为普通用户
+                    if (otherClubCount == 0) {
+                        oldPresident.setRole(RoleEnum.USER.getCode());
+                        userMapper.updateById(oldPresident);
+                    }
+                }
+
+                // 删除新社长的成员记录（社长不需要作为成员存在）
+                clubMemberMapper.delete(
+                    new LambdaQueryWrapper<ClubMember>()
+                        .eq(ClubMember::getClubId, transfer.getClubId())
+                        .eq(ClubMember::getUserId, transfer.getNewPresidentId())
+                );
+
+                // 更新社团成员数（减少1人）
+                if (club.getMemberCount() != null && club.getMemberCount() > 0) {
+                    club.setMemberCount(club.getMemberCount() - 1);
+                    clubMapper.updateById(club);
+                }
             }
         }
     }

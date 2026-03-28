@@ -31,6 +31,6 @@ public class AuthController {
 
     @GetMapping("/current")
     public Result<UserVO> getCurrentUser() {
-        return Result.success(userService.getCurrentUser());
+        return Result.success(userService.getCurrentUserInfo());
     }
 }

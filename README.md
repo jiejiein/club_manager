@@ -25,14 +25,17 @@
 club_manager/
 ├── backend/                    # 后端项目
 │   ├── src/main/java/com/club/
+│   │   ├── annotation/        # 自定义注解（@Log 操作日志）
+│   │   ├── aspect/            # AOP切面（日志记录）
+│   │   ├── common/            # 公共类（BaseService、BusinessException、ErrorCode）
 │   │   ├── config/            # 配置类
 │   │   ├── controller/        # 控制器
 │   │   ├── dto/               # 数据传输对象
 │   │   ├── entity/            # 实体类
 │   │   ├── enums/             # 枚举类
-│   │   ├── exception/         # 异常处理
+│   │   ├── exception/         # 异常处理（GlobalExceptionHandler）
 │   │   ├── mapper/            # MyBatis Mapper
-│   │   ├── security/          # 安全配置
+│   │   ├── security/          # 安全配置（JWT认证）
 │   │   ├── service/           # 服务层
 │   │   └── vo/                # 视图对象
 │   └── src/main/resources/
@@ -40,15 +43,19 @@ club_manager/
 │       └── db/               # 数据库脚本目录
 │           ├── init.sql               # 表结构 + 基础数据
 │           ├── data-generator-final.sql # 完整测试数据
-│           └── update-avatars.sql     # 头像更新脚本
+│           ├── update-avatars.sql     # 头像更新脚本
+│           ├── add-more-students.sql  # 补充学生数据
+│           ├── assign-new-presidents.sql # 分配新社长
+│           └── rename-users.sql       # 用户名重命名
 │
 └── frontend/                   # 前端项目
     ├── src/
     │   ├── api/               # API接口
+    │   ├── composables/       # 组合式函数（useDialog、usePagination、useSearch）
     │   ├── layout/            # 布局组件
     │   ├── router/            # 路由配置
-    │   ├── stores/            # 状态管理
-    │   ├── styles/            # 样式文件
+    │   ├── stores/            # 状态管理（Pinia）
+    │   ├── styles/            # 样式文件（含暗黑模式 dark.scss）
     │   ├── utils/             # 工具函数
     │   └── views/             # 页面组件
     └── vite.config.js         # Vite配置
@@ -131,9 +138,10 @@ npm run dev
 - 用户名: `admin`
 - 密码: `123456`
 
-**测试账号（由 data-generator-final.sql 生成）:**
-- 社长账号: `president1` ~ `president5` (密码: `123456`)
-- 学生账号: `student1` ~ `student15` (密码: `123456`)
+**测试账号（由 data-generator-final.sql + 补充脚本生成）:**
+- 社长账号: `president1` ~ `president10` (密码: `123456`)
+- 学生账号: `student1` ~ `student20` (密码: `123456`)
+- 共计: 1个管理员 + 10个社长 + 20个学生 = 31个用户
 
 ### 5. 数据库脚本说明
 
@@ -142,11 +150,15 @@ npm run dev
 | `init.sql` | 创建12张表结构 + 初始化基础数据（3个默认账号 + 5个社团类型） | 首次建库时执行 |
 | `data-generator-final.sql` | 清空所有表数据 + 导入完整测试数据（1个管理员 + 5个社长 + 15个学生 + 社团/活动/通知等） | 需要测试数据时执行 |
 | `update-avatars.sql` | 为所有用户设置随机头像（使用DiceBear API） | 可选，美化用户头像显示 |
+| `add-more-students.sql` | 补充10个学生用户(student16-25)并分配到各社团 | 补充测试数据 |
+| `assign-new-presidents.sql` | 将student1-5提升为社长，重新分配10个社团的社长 | 调整社团管理层 |
+| `rename-users.sql` | 重命名用户：原student1-5改为president6-10，student6-25改为student1-20 | 优化用户名规范 |
 
 **注意事项:**
 - `data-generator-final.sql` 会先清空所有表数据，不会删除表结构
 - 所有脚本都设置了外键检查，执行顺序已优化，不会出现冲突
 - 脚本执行后，所有用户密码统一为 `123456`
+- 补充脚本(add-more-students.sql → assign-new-presidents.sql → rename-users.sql)需按顺序执行
 
 ## API接口
 
@@ -172,3 +184,35 @@ Authorization: Bearer <token>
 - Node.js 16+
 - MySQL 8.0+
 - Maven 3.6+
+
+---
+
+## 优化内容
+
+### 后端优化
+
+#### 公共类封装 (`common` 包)
+- **BaseService**: 基础服务类，封装获取当前用户、角色判断等通用方法
+- **BusinessException**: 业务异常类，统一异常处理
+- **ErrorCode**: 错误码枚举，定义系统所有错误码（系统错误、申请/活动/社团/用户/缴费相关业务错误）
+
+#### AOP日志记录
+- **@Log 注解**: 自定义注解标记需要记录日志的方法
+- **LogAspect**: AOP切面实现，自动记录操作人、IP、执行时间、参数等信息
+
+### 前端优化
+
+#### 组合式函数 (`composables` 包)
+- **useDialog**: 弹窗逻辑封装，统一管理弹窗的打开/关闭/编辑模式
+- **usePagination**: 分页逻辑封装，统一封装分页查询、页码切换、选择等功能
+- **useSearch**: 搜索逻辑封装，统一封装搜索表单、重置、参数过滤等功能
+
+#### 暗黑模式（夜间模式）
+- 基于 Element Plus 官方暗黑主题 + 自定义样式覆盖
+- 所有页面硬编码颜色替换为 CSS 变量
+- 平滑的主题切换过渡动画
+- 主题状态持久化到 localStorage
+- 详见《夜间模式优化完整文档.md》
+
+### 项目优化详情
+- 详见《项目完整优化文档.md》
