@@ -147,16 +147,11 @@ npm run dev
 
 | 脚本文件 | 用途 | 执行时机 |
 |---------|------|---------|
-| `init.sql` | 创建12张表结构 + 初始化基础数据（3个默认账号 + 5个社团类型） | 首次建库时执行 |
-| `data-generator-final.sql` | 清空所有表数据 + 导入完整测试数据（1个管理员 + 5个社长 + 15个学生 + 社团/活动/通知等） | 需要测试数据时执行 |
-| `update-avatars.sql` | 为所有用户设置随机头像（使用DiceBear API） | 可选，美化用户头像显示 |
-| `add-more-students.sql` | 补充10个学生用户(student16-25)并分配到各社团 | 补充测试数据 |
-| `assign-new-presidents.sql` | 将student1-5提升为社长，重新分配10个社团的社长 | 调整社团管理层 |
-| `rename-users.sql` | 重命名用户：原student1-5改为president6-10，student6-25改为student1-20 | 优化用户名规范 |
+| `init.sql` | 创建13张表结构 + 初始化基础数据 + 测试数据（使用Navicat导出的完整脚本） | 首次建库时执行 |
 
 **注意事项:**
-- `data-generator-final.sql` 会先清空所有表数据，不会删除表结构
-- 所有脚本都设置了外键检查，执行顺序已优化，不会出现冲突
+- `init.sql` 包含完整的建表语句和初始数据，执行一次即可完成数据库初始化
+- 默认账号：admin / president / student，初始密码均为 666666
 - 脚本执行后，所有用户密码统一为 `123456`
 - 补充脚本(add-more-students.sql → assign-new-presidents.sql → rename-users.sql)需按顺序执行
 
