@@ -277,11 +277,27 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+/* ========== 现代简约科技风 - 学生端 ========== */
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 .my-payment-page {
   padding: 20px;
+  position: relative;
 
+  /* ========== 欢迎横幅流动渐变动画 ========== */
   .welcome-banner {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #6366f1, #a855f7, #3b82f6, #6366f1, #a855f7);
+    background-size: 300% 300%;
+    animation: gradientFlow 8s ease infinite;
     border-radius: 16px;
     padding: 30px;
     margin-bottom: 24px;
@@ -289,12 +305,30 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     color: #fff;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      animation: shimmer 4s ease-in-out infinite;
+    }
 
     .welcome-content {
+      position: relative;
+      z-index: 1;
+
       h2 {
         margin: 0 0 8px;
         font-size: 28px;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
       }
+
       p {
         margin: 0;
         opacity: 0.9;
@@ -305,6 +339,8 @@ onMounted(() => {
     .stats-overview {
       display: flex;
       gap: 40px;
+      position: relative;
+      z-index: 1;
 
       .stat-item {
         text-align: center;
@@ -313,6 +349,7 @@ onMounted(() => {
           font-size: 32px;
           font-weight: bold;
           line-height: 1;
+          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .stat-label {
@@ -324,10 +361,48 @@ onMounted(() => {
     }
   }
 
+  /* ========== el-card 渐变边框 + 毛玻璃 ========== */
   .payment-section,
   .records-section {
     margin-bottom: 24px;
-    border-radius: 12px;
+    border-radius: 16px;
+    position: relative;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: none;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1.5px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.2));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    :deep(.el-card__header) {
+      position: relative;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 12px;
+        bottom: 12px;
+        width: 4px;
+        border-radius: 4px;
+        background: linear-gradient(180deg, #6366f1, #a855f7, #3b82f6);
+        box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+      }
+    }
 
     .section-header {
       display: flex;
@@ -340,9 +415,10 @@ onMounted(() => {
         display: flex;
         align-items: center;
         gap: 8px;
+        color: #1e293b;
 
         .el-icon {
-          color: var(--el-color-primary);
+          color: #6366f1;
         }
       }
     }
@@ -354,23 +430,45 @@ onMounted(() => {
     }
   }
 
+  /* ========== 缴费卡片渐变边框 + 悬停3D微效果 ========== */
   .payment-card {
     background: #fff;
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 20px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      padding: 2px;
+      background: linear-gradient(135deg, rgba(245, 108, 108, 0.4), rgba(230, 162, 60, 0.3), rgba(245, 108, 108, 0.2));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
 
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      transform: translateY(-6px) rotateX(2deg);
+      box-shadow: 0 16px 40px rgba(245, 108, 108, 0.12), 0 0 0 1px rgba(245, 108, 108, 0.1);
+
+      &::before {
+        opacity: 1;
+      }
     }
 
     &.unpaid {
-      border-color: #fde2e2;
-      background: linear-gradient(135deg, #fff 0%, #fef0f0 100%);
+      border-color: rgba(245, 108, 108, 0.15);
+      background: linear-gradient(135deg, #fff 0%, rgba(254, 240, 240, 0.6) 100%);
     }
 
     .card-header {
@@ -387,6 +485,7 @@ onMounted(() => {
         display: flex;
         align-items: center;
         justify-content: center;
+        box-shadow: 0 4px 12px rgba(245, 108, 108, 0.3);
       }
     }
 
@@ -394,7 +493,7 @@ onMounted(() => {
       margin: 0 0 8px;
       font-size: 16px;
       font-weight: 600;
-      color: #303133;
+      color: #1e293b;
     }
 
     .payment-club {
@@ -402,18 +501,18 @@ onMounted(() => {
       align-items: center;
       gap: 6px;
       font-size: 13px;
-      color: #606266;
+      color: #64748b;
       margin-bottom: 8px;
 
       .el-icon {
-        color: var(--el-color-primary);
+        color: #6366f1;
       }
     }
 
     .payment-desc {
       margin: 0 0 16px;
       font-size: 13px;
-      color: #909399;
+      color: #94a3b8;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -451,7 +550,26 @@ onMounted(() => {
     .card-actions {
       .el-button {
         width: 100%;
+        transition: all 0.3s ease;
+
+        &:hover {
+          box-shadow: 0 0 20px rgba(245, 108, 108, 0.35);
+          transform: translateY(-1px);
+        }
       }
+    }
+  }
+
+  /* ========== 时间线渐变色节点 ========== */
+  :deep(.el-timeline) {
+    .el-timeline-item__node {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .el-timeline-item__tail {
+      border-left: 2px solid linear-gradient(180deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.1));
+      border-left-color: rgba(99, 102, 241, 0.15);
     }
   }
 
@@ -460,19 +578,26 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px;
-    background: #f8f9fa;
-    border-radius: 8px;
+    background: rgba(99, 102, 241, 0.03);
+    border-radius: 10px;
+    border: 1px solid rgba(99, 102, 241, 0.06);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(99, 102, 241, 0.06);
+      border-color: rgba(99, 102, 241, 0.12);
+    }
 
     .record-info {
       h4 {
         margin: 0 0 4px;
         font-size: 15px;
-        color: #303133;
+        color: #1e293b;
       }
 
       .record-club {
         font-size: 13px;
-        color: #909399;
+        color: #94a3b8;
       }
     }
 
@@ -493,6 +618,28 @@ onMounted(() => {
     }
   }
 
+  /* ========== 缴费确认弹窗科技感样式 ========== */
+  :deep(.el-dialog) {
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.2);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366f1, #a855f7, #3b82f6, #6366f1);
+      background-size: 200% 100%;
+      animation: borderFlow 3s linear infinite;
+    }
+  }
+
   .pay-dialog-content {
     text-align: center;
 
@@ -509,27 +656,29 @@ onMounted(() => {
         font-size: 48px;
         color: #f56c6c;
         font-weight: bold;
+        text-shadow: 0 2px 12px rgba(245, 108, 108, 0.2);
       }
     }
 
     .pay-info {
       text-align: left;
-      background: #f8f9fa;
+      background: rgba(99, 102, 241, 0.03);
       padding: 16px;
-      border-radius: 8px;
+      border-radius: 10px;
       margin-bottom: 20px;
+      border: 1px solid rgba(99, 102, 241, 0.06);
 
       p {
         margin: 0 0 8px;
         font-size: 14px;
-        color: #606266;
+        color: #64748b;
 
         &:last-child {
           margin-bottom: 0;
         }
 
         strong {
-          color: #303133;
+          color: #1e293b;
         }
       }
     }
@@ -540,7 +689,7 @@ onMounted(() => {
       h4 {
         margin: 0 0 12px;
         font-size: 14px;
-        color: #606266;
+        color: #475569;
       }
 
       .method-list {
@@ -553,28 +702,36 @@ onMounted(() => {
           align-items: center;
           gap: 12px;
           padding: 12px 16px;
-          border: 2px solid #e4e7ed;
-          border-radius: 8px;
+          border: 2px solid rgba(99, 102, 241, 0.1);
+          border-radius: 10px;
           cursor: pointer;
           transition: all 0.3s;
+          background: rgba(255, 255, 255, 0.6);
 
           &:hover {
-            border-color: #c0c4cc;
+            border-color: rgba(99, 102, 241, 0.25);
+            background: rgba(99, 102, 241, 0.04);
           }
 
           &.active {
-            border-color: var(--el-color-primary);
-            background: #f5f7fa;
+            border-color: #6366f1;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(168, 85, 247, 0.06));
+            box-shadow: 0 0 16px rgba(99, 102, 241, 0.12);
           }
 
           span {
             font-size: 14px;
-            color: #303133;
+            color: #334155;
           }
         }
       }
     }
   }
+}
+
+@keyframes borderFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
 }
 
 @media (max-width: 768px) {

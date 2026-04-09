@@ -1,5 +1,5 @@
 <template>
-  <div class="payment-page">
+  <div class="payment-page page-container">
     <el-card>
       <template #header>
         <div class="card-header">
@@ -196,15 +196,208 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+/* ========== 现代简约科技风 - 页面容器 ========== */
+.page-container {
+  padding: 4px;
+  min-height: 100%;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 80%, rgba(59, 130, 246, 0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+    animation: bgFloat 20s ease-in-out infinite;
+  }
+}
+
+@keyframes bgFloat {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(2%, -1%) rotate(1deg); }
+  66% { transform: translate(-1%, 2%) rotate(-1deg); }
+}
+
 .payment-page {
+  position: relative;
+  z-index: 1;
+
+  /* ========== 毛玻璃搜索表单 ========== */
+  .search-form {
+    margin-bottom: 20px;
+    padding: 20px 24px;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 24px rgba(99, 102, 241, 0.06);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.75);
+      box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+    }
+  }
+
+  /* ========== el-card 渐变边框 ========== */
+  :deep(.el-card) {
+    position: relative;
+    border: none;
+    border-radius: 16px;
+    overflow: visible;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1.5px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.1));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    &:hover::before {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.6), rgba(168, 85, 247, 0.5), rgba(59, 130, 246, 0.4), rgba(99, 102, 241, 0.3));
+    }
+  }
+
+  /* ========== Card Header 左侧渐变装饰条 ========== */
+  :deep(.el-card__header) {
+    position: relative;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      bottom: 12px;
+      width: 4px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #6366f1, #a855f7, #3b82f6);
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+    }
+  }
+
   .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
   }
 
-  .search-form {
-    margin-bottom: 20px;
+  /* ========== 表格渐变行悬停 ========== */
+  :deep(.el-table) {
+    border-radius: 12px;
+    overflow: hidden;
+
+    th.el-table__cell {
+      background: rgba(99, 102, 241, 0.04) !important;
+      color: #475569;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .el-table__row {
+      transition: all 0.3s ease;
+
+      &:hover > td.el-table__cell {
+        background: linear-gradient(90deg, rgba(99, 102, 241, 0.04), rgba(168, 85, 247, 0.04), rgba(59, 130, 246, 0.02)) !important;
+      }
+    }
+
+    .el-table__body tr.el-table__row--striped td.el-table__cell {
+      background: rgba(99, 102, 241, 0.02);
+    }
   }
+
+  /* ========== 操作按钮悬停发光 ========== */
+  :deep(.el-button--primary) {
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+      transform: translateY(-1px);
+    }
+  }
+
+  :deep(.el-button.is-link) {
+    transition: all 0.3s ease;
+
+    &:hover {
+      text-shadow: 0 0 8px currentColor;
+      filter: brightness(1.1);
+    }
+  }
+
+  /* ========== 弹窗毛玻璃 + 渐变顶部边框 ========== */
+  :deep(.el-dialog) {
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.2);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366f1, #a855f7, #3b82f6, #6366f1);
+      background-size: 200% 100%;
+      animation: borderFlow 3s linear infinite;
+    }
+  }
+
+  :deep(.el-dialog__header) {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+  }
+
+  :deep(.el-dialog__body) {
+    padding: 20px 24px;
+  }
+
+  /* ========== 分页器美化 ========== */
+  :deep(.el-pagination) {
+    margin-top: 20px;
+    justify-content: flex-end;
+
+    .el-pager li {
+      border-radius: 8px;
+      transition: all 0.3s ease;
+
+      &.is-active {
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      }
+    }
+  }
+}
+
+@keyframes borderFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
 }
 </style>

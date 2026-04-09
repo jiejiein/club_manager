@@ -223,19 +223,32 @@ const handleLogout = () => {
 </script>
 
 <style lang="scss" scoped>
-/* 顶部导航栏容器 */
+/* 顶部导航栏容器 - 增强毛玻璃效果 */
 .header {
   height: 70px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);  /* 毛玻璃效果 */
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   position: relative;
   z-index: 10;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+
+  /* 底部渐变发光线条 - 科技感分割线 */
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.3), rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.3), transparent);
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.15), 0 0 20px rgba(102, 126, 234, 0.05);
+  }
 }
 
 /* 左侧区域：折叠按钮 + 面包屑 */
@@ -245,7 +258,7 @@ const handleLogout = () => {
   gap: 20px;
 }
 
-/* 侧边栏折叠按钮 */
+/* 侧边栏折叠按钮 - 增强悬停效果 */
 .collapse-btn {
   width: 40px;
   height: 40px;
@@ -256,20 +269,21 @@ const handleLogout = () => {
   cursor: pointer;
   color: #64748b;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 
-  /* 悬停效果：渐变背景 + 阴影 */
+  /* 悬停效果：渐变背景 + 阴影 + 发光 */
   &:hover {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #fff;
     border-color: transparent;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35), 0 0 20px rgba(102, 126, 234, 0.15);
+    transform: translateY(-2px);
   }
 
   /* 点击效果：缩小 */
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.95) translateY(0);
   }
 }
 
@@ -314,8 +328,8 @@ const handleLogout = () => {
   cursor: pointer;
   color: #64748b;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.8);
   position: relative;
   overflow: hidden;
 
@@ -336,9 +350,9 @@ const handleLogout = () => {
   &:hover {
     background: #fff;
     color: #667eea;
-    border-color: #667eea;
+    border-color: rgba(102, 126, 234, 0.4);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15), 0 0 15px rgba(102, 126, 234, 0.08);
 
     &::before {
       width: 60px;
@@ -376,7 +390,7 @@ const handleLogout = () => {
   margin-left: 4px;
 }
 
-/* 用户信息展示区域 */
+/* 用户信息展示区域 - 微妙渐变边框悬停效果 */
 .user-info {
   display: flex;
   align-items: center;
@@ -385,14 +399,31 @@ const handleLogout = () => {
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  position: relative;
 
-  /* 悬停效果 */
+  /* 悬停效果 - 渐变边框 */
   &:hover {
     background: #fff;
-    border-color: #667eea;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.12);
+    border-color: transparent;
+    box-shadow:
+      0 4px 12px rgba(102, 126, 234, 0.12),
+      0 0 20px rgba(102, 126, 234, 0.06);
+
+    /* 渐变边框效果 */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.4), rgba(139, 92, 246, 0.3), rgba(6, 182, 212, 0.4));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
 
     .user-avatar {
       transform: scale(1.05);

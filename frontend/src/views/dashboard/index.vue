@@ -573,21 +573,48 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+// ==================== 整体布局 - 网格背景纹理 ====================
 .dashboard {
   padding: 0;
+  position: relative;
+  min-height: 100vh;
+
+  // 微妙的网格背景纹理
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // 确保所有子元素在网格之上
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 }
 
-// ==================== 欢迎区域 ====================
+// ==================== 欢迎区域 - 流动渐变背景 ====================
 .welcome-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 30%, #a855f7 60%, #6366f1 100%);
+  background-size: 200% 200%;
+  animation: gradientFlow 8s ease infinite;
   border-radius: 16px;
   padding: 32px;
   margin-bottom: 24px;
   color: #fff;
   position: relative;
   overflow: hidden;
-  
-  /* 装饰性圆形背景 */
+
+  /* 装饰性圆形背景 - 增加层次感 */
   &::before {
     content: '';
     position: absolute;
@@ -597,8 +624,9 @@ onMounted(() => {
     height: 400px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
+    animation: welcome-orb 8s ease-in-out infinite;
   }
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -608,7 +636,19 @@ onMounted(() => {
     height: 200px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 50%;
+    animation: welcome-orb 6s ease-in-out infinite reverse;
   }
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes welcome-orb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, -20px) scale(1.1); }
 }
 
 .welcome-content {
@@ -626,6 +666,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 12px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* 挥手动画 */
@@ -643,17 +684,19 @@ onMounted(() => {
 .welcome-subtitle {
   font-size: 15px;
   opacity: 0.9;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
 }
 
 .welcome-date {
   text-align: right;
-  
+
   .date-day {
     font-size: 48px;
     font-weight: 700;
     line-height: 1;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
   }
-  
+
   .date-full {
     font-size: 14px;
     opacity: 0.8;
@@ -661,7 +704,7 @@ onMounted(() => {
   }
 }
 
-// ==================== 统计卡片 ====================
+// ==================== 统计卡片 - 渐变边框 + 3D 翻转微效果 ====================
 .stats-row {
   margin-bottom: 24px;
 }
@@ -673,13 +716,52 @@ onMounted(() => {
   position: relative;
   overflow: hidden;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   animation: card-slide-up 0.6s ease-out;
-  
-  /* 悬停上浮效果 */
+  transform-style: preserve-3d;
+  perspective: 800px;
+
+  // 渐变边框伪元素
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  // 不同卡片不同渐变色
+  &.stat-card-1::before {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+  }
+  &.stat-card-2::before {
+    background: linear-gradient(90deg, #11998e, #38ef7d);
+  }
+  &.stat-card-3::before {
+    background: linear-gradient(90deg, #f093fb, #f5576c);
+  }
+  &.stat-card-4::before {
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+  }
+
+  /* 悬停上浮 + 3D 微翻转效果 */
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-6px) rotateX(2deg);
+    box-shadow:
+      0 20px 40px -10px rgba(99, 102, 241, 0.2), 0 0 30px rgba(99, 102, 241, 0.08);
+
+    &::before {
+      opacity: 1;
+    }
+
+    .stat-bg-icon {
+      opacity: 0.08;
+      transform: scale(1.1) rotate(5deg);
+    }
   }
 }
 
@@ -702,6 +784,7 @@ onMounted(() => {
   bottom: -20px;
   opacity: 0.05;
   color: #667eea;
+  transition: all 0.4s ease;
 }
 
 .stat-content {
@@ -720,6 +803,7 @@ onMounted(() => {
   justify-content: center;
   color: #fff;
   flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .stat-info {
@@ -747,33 +831,50 @@ onMounted(() => {
   gap: 4px;
   margin-top: 12px;
   font-size: 13px;
-  
+
   .trend-up {
     color: #10b981;  // 绿色-上升
     font-weight: 600;
   }
-  
+
   .trend-down {
     color: #ef4444;  // 红色-下降
     font-weight: 600;
   }
-  
+
   .trend-text {
     color: #94a3b8;
     margin-left: 4px;
   }
 }
 
-// ==================== 图表区域 ====================
+// ==================== 图表区域 - 毛玻璃 + 渐变边框 ====================
 .charts-row {
   margin-bottom: 24px;
 }
 
 .chart-card {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #a855f7, #3b82f6);
+  }
+}
+
+@keyframes chart-border-flow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
 }
 
 .chart-header {
@@ -790,7 +891,7 @@ onMounted(() => {
   font-size: 16px;
   font-weight: 600;
   color: #1e293b;
-  
+
   .el-icon {
     color: #667eea;
   }
@@ -803,11 +904,17 @@ onMounted(() => {
 // ==================== 底部区域 ====================
 .bottom-row {
   .section-card {
-    background: #fff;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px) saturate(150%);
     border-radius: 16px;
     padding: 24px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     height: 100%;
+    transition: all 0.4s ease;
+
+    &:hover {
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.08), 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
   }
 }
 
@@ -825,13 +932,13 @@ onMounted(() => {
   font-size: 16px;
   font-weight: 600;
   color: #1e293b;
-  
+
   .el-icon {
     color: #667eea;
   }
 }
 
-// ==================== 快捷操作 ====================
+// ==================== 快捷操作 - 悬停发光效果 ====================
 .actions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -846,11 +953,32 @@ onMounted(() => {
   padding: 16px;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s;
-  
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  // 悬停发光背景
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.5s ease;
+  }
+
   &:hover {
-    background: #f8fafc;
-    transform: translateY(-2px);
+    background: rgba(248, 250, 252, 0.8);
+    transform: translateY(-4px);
+
+    &::before {
+      width: 150%;
+      height: 150%;
+    }
   }
 }
 
@@ -862,11 +990,13 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   color: #fff;
-  transition: all 0.3s;
-  
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+
   .action-item:hover & {
     transform: scale(1.1);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -874,26 +1004,65 @@ onMounted(() => {
   font-size: 13px;
   color: #475569;
   font-weight: 500;
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s;
+
+  .action-item:hover & {
+    color: #1e293b;
+  }
 }
 
-// ==================== 通知列表 ====================
+// ==================== 通知列表 - 左侧渐变色条 ====================
 .notice-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .notice-item {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 12px;
+  padding: 12px 12px 12px 16px;
   border-radius: 10px;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
   cursor: pointer;
-  
+  position: relative;
+  overflow: hidden;
+
+  // 左侧渐变色条
+  &::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 3px;
+    height: calc(100% - 16px);
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &.dot-info::before {
+    background: linear-gradient(180deg, #3b82f6, #60a5fa);
+  }
+  &.dot-success::before {
+    background: linear-gradient(180deg, #10b981, #34d399);
+  }
+  &.dot-warning::before {
+    background: linear-gradient(180deg, #f59e0b, #fbbf24);
+  }
+  &.dot-danger::before {
+    background: linear-gradient(180deg, #ef4444, #f87171);
+  }
+
   &:hover {
     background: #f8fafc;
+
+    &::before {
+      opacity: 1;
+    }
   }
 }
 
@@ -904,11 +1073,16 @@ onMounted(() => {
   border-radius: 50%;
   margin-top: 6px;
   flex-shrink: 0;
-  
-  &.dot-info { background: #3b82f6; }      // 蓝色-信息
-  &.dot-success { background: #10b981; }  // 绿色-成功
-  &.dot-warning { background: #f59e0b; }  // 黄色-警告
-  &.dot-danger { background: #ef4444; }   // 红色-危险
+  transition: all 0.3s ease;
+
+  &.dot-info { background: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+  &.dot-success { background: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
+  &.dot-warning { background: #f59e0b; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1); }
+  &.dot-danger { background: #ef4444; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1); }
+
+  .notice-item:hover & {
+    transform: scale(1.3);
+  }
 }
 
 .notice-content {
@@ -923,6 +1097,11 @@ onMounted(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.3s;
+
+  .notice-item:hover & {
+    color: #667eea;
+  }
 }
 
 .notice-time {
@@ -937,20 +1116,20 @@ onMounted(() => {
     text-align: center;
     gap: 20px;
   }
-  
+
   .welcome-date {
     text-align: center;
   }
-  
+
   .welcome-title {
     font-size: 22px;
     justify-content: center;
   }
-  
+
   .stat-value {
     font-size: 24px;
   }
-  
+
   .actions-grid {
     grid-template-columns: repeat(3, 1fr);
   }

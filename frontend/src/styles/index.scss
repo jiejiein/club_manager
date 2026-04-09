@@ -40,30 +40,81 @@ a {
   animation: fadeInUp 0.5s ease;
 }
 
-// 卡片通用样式
+// 卡片通用样式 - 毛玻璃效果
 .card-base {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 0 30px rgba(102, 126, 234, 0.04);
   transition: all 0.3s ease;
-  
+  position: relative;
+  overflow: hidden;
+
+  // 渐变边框装饰（伪元素实现）
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.4), rgba(139, 92, 246, 0.3), rgba(6, 182, 212, 0.4), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
   &:hover {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 0 40px rgba(102, 126, 234, 0.08);
+    border-color: rgba(102, 126, 234, 0.2);
+    transform: translateY(-2px);
+
+    &::before {
+      opacity: 1;
+    }
   }
 }
 
-// 按钮通用样式
+// 按钮通用样式 - 光泽扫过动画
 .btn-gradient {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
   color: #fff;
   transition: all 0.3s ease;
-  
+  position: relative;
+  overflow: hidden;
+
+  // 光泽扫过效果
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 40%;
+    height: 200%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.15),
+      rgba(255, 255, 255, 0.3),
+      rgba(255, 255, 255, 0.15),
+      transparent
+    );
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+    pointer-events: none;
+  }
+
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4), 0 0 30px rgba(102, 126, 234, 0.15);
+
+    &::after {
+      left: 120%;
+    }
   }
-  
+
   &:active {
     transform: translateY(0);
   }
@@ -165,12 +216,16 @@ a {
   }
 }
 
-// 搜索表单优化
+// 搜索表单优化 - 毛玻璃风格
 .search-form {
   margin-bottom: 16px;
   padding: 16px;
-  background: #f8fafc;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 0 20px rgba(102, 126, 234, 0.03);
   
   .el-form-item {
     margin-bottom: 0;
@@ -192,17 +247,32 @@ a {
   }
 }
 
-// 表格样式优化
+// 表格样式优化 - 科技感
 .el-table {
   font-size: 14px;
+  border-radius: 12px;
+  overflow: hidden;
 
   .el-table__header {
     th {
-      background: #f8fafc !important;
-      color: #475569;
+      background: linear-gradient(135deg, #f0f4ff 0%, #eef2ff 50%, #f0f9ff 100%) !important;
+      color: #374151;
       font-weight: 600;
       padding: 14px 0;
       height: 48px;
+      border-bottom: 1px solid rgba(102, 126, 234, 0.12);
+      position: relative;
+
+      // 表头底部渐变线
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(102, 126, 234, 0.3), rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.3));
+      }
     }
   }
 
@@ -210,6 +280,22 @@ a {
     td {
       padding: 12px 0;
       height: 52px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+      position: relative;
+
+      // 行左边框颜色指示
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 20%;
+        bottom: 20%;
+        width: 3px;
+        border-radius: 0 3px 3px 0;
+        background: linear-gradient(180deg, rgba(102, 126, 234, 0.4), rgba(139, 92, 246, 0.2));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
     }
   }
 
@@ -218,13 +304,17 @@ a {
     padding: 0 16px;
   }
 
-  // 行悬停效果
+  // 行悬停效果 - 科技感高亮
   tr:hover > td {
-    background-color: #f8fafc !important;
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.04) 0%, rgba(139, 92, 246, 0.02) 50%, rgba(6, 182, 212, 0.04) 100%) !important;
+
+    &::before {
+      opacity: 1;
+    }
   }
 }
 
-// 分页器优化
+// 分页器优化 - 科技感按钮
 .el-pagination {
   margin-top: 20px;
   padding: 0;
@@ -239,6 +329,43 @@ a {
       width: 110px;
     }
   }
+
+  // 分页按钮科技感样式
+  .el-pager li {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+
+    &:hover {
+      color: #667eea;
+      background: rgba(102, 126, 234, 0.08);
+      border-color: rgba(102, 126, 234, 0.2);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.12);
+    }
+
+    &.is-active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+  }
+
+  .btn-prev,
+  .btn-next {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+
+    &:hover {
+      color: #667eea;
+      background: rgba(102, 126, 234, 0.08);
+      border-color: rgba(102, 126, 234, 0.2);
+    }
+  }
 }
 
 // 按钮链接样式优化
@@ -248,11 +375,147 @@ a {
   font-size: 14px;
 }
 
-// 标签样式优化
+// 标签样式优化 - 渐变背景选项
 .el-tag {
   padding: 0 10px;
   height: 28px;
   line-height: 26px;
   font-size: 13px;
-  border-radius: 4px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+
+  // 渐变标签变体
+  &.el-tag--primary {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%);
+    border-color: rgba(102, 126, 234, 0.25);
+    color: #667eea;
+  }
+
+  &.el-tag--success {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(52, 211, 153, 0.12) 100%);
+    border-color: rgba(16, 185, 129, 0.25);
+    color: #10b981;
+  }
+
+  &.el-tag--warning {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(251, 191, 36, 0.12) 100%);
+    border-color: rgba(245, 158, 11, 0.25);
+    color: #f59e0b;
+  }
+
+  &.el-tag--danger {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(248, 113, 113, 0.12) 100%);
+    border-color: rgba(239, 68, 68, 0.25);
+    color: #ef4444;
+  }
+
+  &.el-tag--info {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(59, 130, 246, 0.12) 100%);
+    border-color: rgba(6, 182, 212, 0.25);
+    color: #06b6d4;
+  }
+}
+
+// ============================================
+// 科技感工具类
+// ============================================
+
+// 科技卡片：带渐变边框和光影效果
+.tech-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // 渐变边框（使用外层包裹技巧）
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.4), rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.4));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  // 顶部光影装饰
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.5), rgba(139, 92, 246, 0.3), rgba(6, 182, 212, 0.5), transparent);
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 30px rgba(102, 126, 234, 0.12), 0 20px 40px rgba(0, 0, 0, 0.08);
+  }
+}
+
+// 霓虹发光边框效果
+.neon-border {
+  border: 1px solid rgba(102, 126, 234, 0.5);
+  box-shadow: 0 0 5px rgba(102, 126, 234, 0.3),
+              0 0 15px rgba(102, 126, 234, 0.15),
+              inset 0 0 5px rgba(102, 126, 234, 0.05);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba(102, 126, 234, 0.7);
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.4),
+                0 0 30px rgba(102, 126, 234, 0.2),
+                0 0 60px rgba(102, 126, 234, 0.1),
+                inset 0 0 10px rgba(102, 126, 234, 0.08);
+  }
+
+  // 霓虹色彩变体
+  &.neon-cyan {
+    border-color: rgba(6, 182, 212, 0.5);
+    box-shadow: 0 0 5px rgba(6, 182, 212, 0.3), 0 0 15px rgba(6, 182, 212, 0.15), inset 0 0 5px rgba(6, 182, 212, 0.05);
+
+    &:hover {
+      border-color: rgba(6, 182, 212, 0.7);
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.4), 0 0 30px rgba(6, 182, 212, 0.2), 0 0 60px rgba(6, 182, 212, 0.1);
+    }
+  }
+
+  &.neon-violet {
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: 0 0 5px rgba(139, 92, 246, 0.3), 0 0 15px rgba(139, 92, 246, 0.15), inset 0 0 5px rgba(139, 92, 246, 0.05);
+
+    &:hover {
+      border-color: rgba(139, 92, 246, 0.7);
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.4), 0 0 30px rgba(139, 92, 246, 0.2), 0 0 60px rgba(139, 92, 246, 0.1);
+    }
+  }
+
+  &.neon-success {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.3), 0 0 15px rgba(16, 185, 129, 0.15), inset 0 0 5px rgba(16, 185, 129, 0.05);
+
+    &:hover {
+      border-color: rgba(16, 185, 129, 0.7);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.4), 0 0 30px rgba(16, 185, 129, 0.2), 0 0 60px rgba(16, 185, 129, 0.1);
+    }
+  }
+}
+
+// 网格渐变背景
+.mesh-gradient-bg {
+  background:
+    radial-gradient(at 20% 20%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+    radial-gradient(at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+    radial-gradient(at 40% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+    radial-gradient(at 90% 80%, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+  background-size: 200% 200%;
+  animation: meshMove 15s ease-in-out infinite;
 }

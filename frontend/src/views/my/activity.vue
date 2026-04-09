@@ -360,11 +360,27 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+/* ========== 现代简约科技风 - 学生端 ========== */
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 .my-activity-page {
   padding: 20px;
+  position: relative;
 
+  /* ========== 欢迎横幅流动渐变动画 ========== */
   .welcome-banner {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #6366f1, #a855f7, #3b82f6, #6366f1, #a855f7);
+    background-size: 300% 300%;
+    animation: gradientFlow 8s ease infinite;
     border-radius: 16px;
     padding: 30px;
     margin-bottom: 24px;
@@ -372,12 +388,30 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     color: #fff;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      animation: shimmer 4s ease-in-out infinite;
+    }
 
     .welcome-content {
+      position: relative;
+      z-index: 1;
+
       h2 {
         margin: 0 0 8px;
         font-size: 28px;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
       }
+
       p {
         margin: 0;
         opacity: 0.9;
@@ -388,6 +422,8 @@ onMounted(() => {
     .stats-overview {
       display: flex;
       gap: 40px;
+      position: relative;
+      z-index: 1;
 
       .stat-item {
         text-align: center;
@@ -396,6 +432,7 @@ onMounted(() => {
           font-size: 36px;
           font-weight: bold;
           line-height: 1;
+          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .stat-label {
@@ -407,9 +444,29 @@ onMounted(() => {
     }
   }
 
+  /* ========== 筛选区域毛玻璃 ========== */
   .filter-section {
     margin-bottom: 24px;
-    border-radius: 12px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: none;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1.5px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.15));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
 
     .filter-bar {
       display: flex;
@@ -432,16 +489,20 @@ onMounted(() => {
           cursor: pointer;
           transition: all 0.3s;
           font-size: 14px;
-          color: #606266;
-          background: #f5f7fa;
+          color: #64748b;
+          background: rgba(99, 102, 241, 0.04);
+          border: 1px solid transparent;
 
           &:hover {
-            background: #e4e7ed;
+            background: rgba(99, 102, 241, 0.08);
+            border-color: rgba(99, 102, 241, 0.1);
           }
 
           &.active {
-            background: var(--el-color-primary);
+            background: linear-gradient(135deg, #6366f1, #a855f7);
             color: #fff;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
+            border-color: transparent;
           }
 
           .tab-badge {
@@ -452,22 +513,57 @@ onMounted(() => {
 
       .filter-search {
         width: 240px;
+
+        :deep(.el-input__wrapper) {
+          border-radius: 20px;
+          background: rgba(99, 102, 241, 0.04);
+          box-shadow: none;
+          border: 1px solid rgba(99, 102, 241, 0.08);
+          transition: all 0.3s;
+
+          &:hover, &.is-focus {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+          }
+        }
       }
     }
   }
 
+  /* ========== 活动卡片渐变边框 + 悬停3D微效果 ========== */
   .activity-list {
     .activity-card {
       background: #fff;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       margin-bottom: 20px;
+      border: 1.5px solid transparent;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 12px;
+        padding: 1.5px;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.3));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
 
       &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        transform: translateY(-6px) rotateX(2deg);
+        box-shadow: 0 16px 40px rgba(99, 102, 241, 0.15), 0 0 0 1px rgba(99, 102, 241, 0.1);
+
+        &::before {
+          opacity: 1;
+        }
       }
 
       .card-cover {
@@ -491,6 +587,8 @@ onMounted(() => {
           font-size: 12px;
           font-weight: 500;
           background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(8px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
           &.status-0 { color: #909399; }
           &.status-1 { color: #e6a23c; }
@@ -508,7 +606,7 @@ onMounted(() => {
           margin: 0 0 12px;
           font-size: 16px;
           font-weight: 600;
-          color: #303133;
+          color: #1e293b;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -519,11 +617,11 @@ onMounted(() => {
           align-items: center;
           gap: 6px;
           font-size: 13px;
-          color: #606266;
+          color: #64748b;
           margin-bottom: 12px;
 
           .el-icon {
-            color: var(--el-color-primary);
+            color: #6366f1;
           }
         }
 
@@ -538,7 +636,7 @@ onMounted(() => {
             align-items: center;
             gap: 6px;
             font-size: 13px;
-            color: #909399;
+            color: #94a3b8;
 
             .el-icon {
               font-size: 14px;
@@ -553,7 +651,7 @@ onMounted(() => {
             display: flex;
             justify-content: space-between;
             font-size: 12px;
-            color: #909399;
+            color: #94a3b8;
             margin-bottom: 6px;
           }
         }
@@ -563,9 +661,40 @@ onMounted(() => {
           justify-content: space-between;
           align-items: center;
           padding-top: 12px;
-          border-top: 1px solid #ebeef5;
+          border-top: 1px solid rgba(99, 102, 241, 0.06);
+
+          .el-button--primary {
+            transition: all 0.3s ease;
+
+            &:hover {
+              box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+              transform: translateY(-1px);
+            }
+          }
         }
       }
+    }
+  }
+
+  /* ========== 弹窗毛玻璃 + 渐变顶部边框 ========== */
+  :deep(.el-dialog) {
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.2);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366f1, #a855f7, #3b82f6, #6366f1);
+      background-size: 200% 100%;
+      animation: borderFlow 3s linear infinite;
     }
   }
 
@@ -583,6 +712,7 @@ onMounted(() => {
       margin: 0 0 12px;
       font-size: 20px;
       font-weight: 600;
+      color: #1e293b;
     }
 
     .detail-tags {
@@ -599,16 +729,21 @@ onMounted(() => {
       h4 {
         margin: 0 0 12px;
         font-size: 14px;
-        color: #606266;
+        color: #475569;
       }
 
       p {
         margin: 0;
         line-height: 1.8;
-        color: #303133;
+        color: #334155;
       }
     }
   }
+}
+
+@keyframes borderFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
 }
 
 @media (max-width: 768px) {

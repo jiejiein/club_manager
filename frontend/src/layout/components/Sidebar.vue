@@ -260,7 +260,7 @@ const userRole = computed(() => userStore.userInfo?.role)
 </script>
 
 <style lang="scss" scoped>
-/* 侧边栏容器：深色渐变背景 */
+/* 侧边栏容器：深色渐变背景 + 微妙网格纹理 */
 .aside {
   background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -277,8 +277,21 @@ const userRole = computed(() => userStore.userInfo?.role)
     left: 0;
     right: 0;
     height: 200px;
-    background: linear-gradient(180deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
+    background: linear-gradient(180deg, rgba(102, 126, 234, 0.12) 0%, rgba(139, 92, 246, 0.05) 50%, transparent 100%);
     pointer-events: none;
+  }
+
+  /* 微妙网格纹理叠加 */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
   }
 }
 
@@ -294,7 +307,7 @@ const userRole = computed(() => userStore.userInfo?.role)
   z-index: 1;
 }
 
-/* Logo 图标 */
+/* Logo 图标 - 呼吸发光动画 */
 .logo-icon {
   width: 42px;
   height: 42px;
@@ -303,13 +316,14 @@ const userRole = computed(() => userStore.userInfo?.role)
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;  /* 防止被压缩 */
+  flex-shrink: 0;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
   transition: all 0.3s ease;
+  animation: glowPulse 3s ease-in-out infinite;
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.2);
   }
 }
 
@@ -319,7 +333,7 @@ const userRole = computed(() => userStore.userInfo?.role)
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.3px;
-  white-space: nowrap;  /* 不换行 */
+  white-space: nowrap;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -329,12 +343,12 @@ const userRole = computed(() => userStore.userInfo?.role)
   align-items: center;
   gap: 10px;
   flex: 1;
-  min-width: 0;  /* 允许 flex 子项收缩 */
+  min-width: 0;
 
   .logo-text {
     flex: 1;
     overflow: hidden;
-    text-overflow: ellipsis;  /* 文字过长显示省略号 */
+    text-overflow: ellipsis;
   }
 }
 
@@ -348,7 +362,7 @@ const userRole = computed(() => userStore.userInfo?.role)
 /* 菜单滚动区域 */
 .menu-wrapper {
   flex: 1;
-  overflow-y: auto;  /* 菜单过多时可滚动 */
+  overflow-y: auto;
   padding: 16px 12px;
   position: relative;
   z-index: 1;
@@ -370,6 +384,21 @@ const userRole = computed(() => userStore.userInfo?.role)
       background: rgba(255, 255, 255, 0.25);
     }
   }
+
+  /* 底部装饰性渐变光晕 */
+  &::after {
+    content: '';
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    height: 60px;
+    background: linear-gradient(0deg, rgba(15, 23, 42, 0.9) 0%, transparent 100%);
+    pointer-events: none;
+    margin: 0 -12px -16px;
+    padding: 0 12px;
+  }
 }
 
 /* 菜单样式覆盖 */
@@ -383,7 +412,7 @@ const userRole = computed(() => userStore.userInfo?.role)
     line-height: 48px;
     margin-bottom: 6px;
     border-radius: 10px;
-    color: #94a3b8;  /* 默认灰色 */
+    color: #94a3b8;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
@@ -396,7 +425,7 @@ const userRole = computed(() => userStore.userInfo?.role)
       top: 0;
       bottom: 0;
       width: 3px;
-      background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(180deg, #667eea 0%, #8b5cf6 50%, #06b6d4 100%);
       opacity: 0;
       transition: opacity 0.3s;
     }
@@ -411,15 +440,18 @@ const userRole = computed(() => userStore.userInfo?.role)
       }
     }
 
-    /* 激活状态 */
+    /* 激活状态 - 更强的光影效果和渐变边框 */
     &.is-active {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.25) 0%, rgba(139, 92, 246, 0.15) 50%, rgba(6, 182, 212, 0.2) 100%);
       color: #fff;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(102, 126, 234, 0.3);
+      box-shadow:
+        0 4px 15px rgba(102, 126, 234, 0.3),
+        0 0 20px rgba(102, 126, 234, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(102, 126, 234, 0.35);
 
       &::before {
-        opacity: 1;  /* 显示左侧指示条 */
+        opacity: 1;
       }
 
       .el-icon {
@@ -459,13 +491,16 @@ const userRole = computed(() => userStore.userInfo?.role)
   margin-left: 4px;
 }
 
-/* 菜单分组标题 */
+/* 菜单分组标题 - 渐变色 */
 .menu-divider {
   padding: 16px 16px 8px;
   font-size: 11px;
   font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;  /* 大写 */
-  letter-spacing: 1px;  /* 字母间距 */
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.6), rgba(139, 92, 246, 0.5), rgba(6, 182, 212, 0.6));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 </style>

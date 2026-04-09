@@ -300,10 +300,12 @@ $themes: (
 
     @keyframes logo-pulse {
       0%, 100% {
-        box-shadow: 0 10px 30px rgba(map-get($theme-colors, primary), 0.4);
+        box-shadow: 0 10px 30px rgba(map-get($theme-colors, primary), 0.4), 0 0 20px rgba(map-get($theme-colors, primary), 0.15);
+        transform: scale(1);
       }
       50% {
-        box-shadow: 0 10px 40px rgba(map-get($theme-colors, primary), 0.6);
+        box-shadow: 0 10px 50px rgba(map-get($theme-colors, primary), 0.6), 0 0 40px rgba(map-get($theme-colors, primary), 0.25), 0 0 60px rgba(map-get($theme-colors, secondary), 0.15);
+        transform: scale(1.05);
       }
     }
 
@@ -311,8 +313,18 @@ $themes: (
       :deep(.el-input__wrapper) {
         &.is-focus {
           border-color: map-get($theme-colors, primary);
-          box-shadow: 0 0 0 4px rgba(map-get($theme-colors, primary), 0.1);
+          box-shadow: 0 0 0 4px rgba(map-get($theme-colors, primary), 0.1), 0 0 20px rgba(map-get($theme-colors, primary), 0.08);
+          animation: input-glow 2s ease-in-out infinite;
         }
+      }
+    }
+
+    @keyframes input-glow {
+      0%, 100% {
+        box-shadow: 0 0 0 4px rgba(map-get($theme-colors, primary), 0.1), 0 0 20px rgba(map-get($theme-colors, primary), 0.08);
+      }
+      50% {
+        box-shadow: 0 0 0 4px rgba(map-get($theme-colors, primary), 0.15), 0 0 30px rgba(map-get($theme-colors, primary), 0.12);
       }
     }
 
@@ -330,7 +342,7 @@ $themes: (
     .login-btn {
       background: linear-gradient(135deg, map-get($theme-colors, primary) 0%, map-get($theme-colors, secondary) 100%);
       &:hover {
-        box-shadow: 0 10px 30px rgba(map-get($theme-colors, primary), 0.4);
+        box-shadow: 0 10px 30px rgba(map-get($theme-colors, primary), 0.4), 0 0 40px rgba(map-get($theme-colors, primary), 0.15);
       }
     }
 
@@ -343,6 +355,13 @@ $themes: (
 
     .theme-btn {
       background: linear-gradient(135deg, map-get($theme-colors, primary) 0%, map-get($theme-colors, secondary) 100%);
+    }
+
+    // 渐变边框 - 使用伪元素实现
+    .login-card::before {
+      background: linear-gradient(135deg, map-get($theme-colors, primary), map-get($theme-colors, secondary), rgba(255,255,255,0.3), map-get($theme-colors, primary));
+      background-size: 300% 300%;
+      animation: gradient-border-rotate 4s ease infinite;
     }
   }
 }
@@ -528,7 +547,7 @@ $themes: (
   }
 }
 
-// 粒子效果
+// 粒子效果 - 更丰富的颜色层次
 .particles {
   position: absolute;
   width: 100%;
@@ -537,9 +556,6 @@ $themes: (
 
 .particle {
   position: absolute;
-  width: 4px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.5);
   border-radius: 50%;
   animation: particle-float 15s infinite;
 }
@@ -550,6 +566,24 @@ $themes: (
     top: random(100) * 1%;
     animation-delay: random(15) * -1s;
     animation-duration: 10s + random(10);
+    @if $i % 5 == 0 {
+      // 大粒子 - 带渐变色
+      width: 6px;
+      height: 6px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.1));
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    } @else if $i % 3 == 0 {
+      // 中粒子 - 柔和发光
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+    } @else {
+      // 小粒子 - 基础
+      width: 3px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.4);
+    }
   }
 }
 
@@ -570,35 +604,73 @@ $themes: (
   }
 }
 
-// 登录包装器
+// 登录包装器 - 增加 perspective 实现 3D 感
 .login-wrapper {
   position: relative;
   z-index: 1;
   width: 100%;
   max-width: 440px;
   padding: 20px;
+  perspective: 1000px;
 }
 
-// 登录卡片
+// 登录卡片 - 增强 3D 感 + 渐变边框
 .login-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px) saturate(180%);
   border-radius: 24px;
   padding: 48px 40px;
-  box-shadow: 
+  box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-  animation: card-appear 0.6s ease-out;
+    0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+    0 1px 0 rgba(255, 255, 255, 0.3) inset;
+  animation: card-appear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  position: relative;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+
+  // 渐变边框伪元素
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 26px;
+    z-index: -1;
+    opacity: 0.6;
+    transition: opacity 0.4s ease;
+  }
+
+  &:hover {
+    transform: translateY(-4px) rotateX(2deg);
+    box-shadow:
+      0 35px 60px -15px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+      0 1px 0 rgba(255, 255, 255, 0.3) inset;
+
+    &::before {
+      opacity: 1;
+    }
+  }
+}
+
+@keyframes gradient-border-rotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 @keyframes card-appear {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.95);
+    transform: translateY(30px) scale(0.95) rotateX(10deg);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1) rotateX(0deg);
   }
 }
 
@@ -616,8 +688,27 @@ $themes: (
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: logo-pulse 2s infinite;
+  animation: logo-pulse 3s ease-in-out infinite, glowPulse 4s ease-in-out infinite;
   transition: all 0.5s ease;
+  position: relative;
+
+  // 内部光泽层
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    border-radius: 20px;
+    animation: logo-shimmer 3s ease-in-out infinite;
+  }
+}
+
+@keyframes logo-shimmer {
+  0%, 100% { left: -100%; }
+  50% { left: 150%; }
 }
 
 .brand-title {
@@ -626,12 +717,24 @@ $themes: (
   color: #1e293b;
   margin-bottom: 8px;
   letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #1e293b 0%, #475569 50%, #1e293b 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: title-shimmer 4s linear infinite;
+}
+
+@keyframes title-shimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
 }
 
 .brand-subtitle {
   font-size: 14px;
   color: #64748b;
   font-weight: 400;
+  letter-spacing: 2px;
 }
 
 // 登录表单
@@ -653,7 +756,7 @@ $themes: (
   font-size: 18px;
   color: #94a3b8;
   z-index: 1;
-  transition: color 0.3s;
+  transition: all 0.4s ease;
 }
 
 .custom-input {
@@ -662,22 +765,25 @@ $themes: (
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     border: 2px solid transparent;
-    transition: all 0.3s;
-    
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(248, 250, 252, 0.8);
+
     &:hover {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      background: rgba(255, 255, 255, 0.95);
     }
-    
+
     &.is-focus {
       border-color: #667eea;
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 0 20px rgba(102, 126, 234, 0.08);
+      background: rgba(255, 255, 255, 1);
     }
   }
-  
+
   :deep(.el-input__inner) {
     height: 48px;
     font-size: 15px;
-    
+
     &::placeholder {
       color: #94a3b8;
     }
@@ -686,6 +792,7 @@ $themes: (
 
 .input-wrapper:focus-within .input-icon {
   color: #667eea;
+  transform: scale(1.15);
 }
 
 // 表单选项
@@ -694,7 +801,7 @@ $themes: (
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-  
+
   :deep(.el-checkbox__label) {
     color: #64748b;
     font-size: 13px;
@@ -704,10 +811,26 @@ $themes: (
 .forgot-link {
   font-size: 13px;
   text-decoration: none;
-  transition: color 0.3s;
+  transition: all 0.3s;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.3s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
 }
 
-// 登录按钮
+// 登录按钮 - 增强 shimmer 光泽扫过效果
 .login-btn {
   width: 100%;
   height: 50px;
@@ -716,49 +839,74 @@ $themes: (
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 2px;
-  transition: all 0.3s;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  
+
+  // 持续循环的 shimmer 光泽
   &::before {
     content: '';
     position: absolute;
     top: 0;
     left: -100%;
-    width: 100%;
+    width: 60%;
     height: 100%;
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0.15),
+      rgba(255, 255, 255, 0.3),
+      rgba(255, 255, 255, 0.15),
       transparent
     );
-    transition: left 0.5s;
+    transition: none;
+    animation: btn-shimmer 3s ease-in-out infinite;
   }
-  
+
+  // 底部光泽线
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
+    pointer-events: none;
+    border-radius: 0 0 12px 12px;
+  }
+
   &:hover {
-    transform: translateY(-2px);
-    
-    &::before {
-      left: 100%;
-    }
+    transform: translateY(-3px);
+    filter: brightness(1.1);
   }
-  
+
   &:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
+    filter: brightness(0.95);
   }
-  
+
   .btn-text {
     margin-right: 8px;
+    position: relative;
+    z-index: 1;
   }
-  
+
   .btn-icon {
     transition: transform 0.3s;
+    position: relative;
+    z-index: 1;
   }
-  
+
   &:hover .btn-icon {
     transform: translateX(4px);
   }
+}
+
+@keyframes btn-shimmer {
+  0% { left: -100%; }
+  50% { left: 150%; }
+  100% { left: 150%; }
 }
 
 // 注册区域
@@ -767,7 +915,7 @@ $themes: (
   margin-top: 24px;
   padding-top: 24px;
   border-top: 1px solid #e2e8f0;
-  
+
   .text-muted {
     color: #94a3b8;
     font-size: 14px;
@@ -782,11 +930,11 @@ $themes: (
   align-items: center;
   gap: 4px;
   transition: all 0.3s;
-  
+
   &:hover {
     gap: 8px;
   }
-  
+
   .el-icon {
     font-size: 14px;
   }
@@ -801,7 +949,7 @@ $themes: (
   position: relative;
   text-align: center;
   margin-bottom: 20px;
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -817,10 +965,10 @@ $themes: (
       transparent
     );
   }
-  
+
   span {
     position: relative;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.92);
     padding: 0 16px;
     color: #94a3b8;
     font-size: 13px;
@@ -841,42 +989,44 @@ $themes: (
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 20px;
-  
+  position: relative;
+  overflow: hidden;
+
   &.wechat {
     background: #f0fdf4;
     color: #22c55e;
-    
+
     &:hover {
       background: #22c55e;
       color: #fff;
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4), 0 0 20px rgba(34, 197, 94, 0.2);
     }
   }
-  
+
   &.qq {
     background: #eff6ff;
     color: #3b82f6;
-    
+
     &:hover {
       background: #3b82f6;
       color: #fff;
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.2);
     }
   }
-  
+
   &.weibo {
     background: #fef2f2;
     color: #ef4444;
-    
+
     &:hover {
       background: #ef4444;
       color: #fff;
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.2);
     }
   }
 }
@@ -887,6 +1037,7 @@ $themes: (
   margin-top: 32px;
   color: rgba(255, 255, 255, 0.7);
   font-size: 13px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 // 响应式
@@ -895,11 +1046,11 @@ $themes: (
     padding: 32px 24px;
     border-radius: 20px;
   }
-  
+
   .brand-title {
     font-size: 24px;
   }
-  
+
   .gradient-orb {
     filter: blur(60px);
   }
@@ -917,5 +1068,41 @@ $themes: (
   .theme-list {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+// 3D 悬停效果
+.login-card:hover {
+  transform: perspective(1000px) rotateX(1deg) rotateY(-1deg) translateY(-4px);
+  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+    0 0 40px rgba(102, 126, 234, 0.15);
+}
+
+// 渐变边框效果
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px; right: -1px; bottom: -1px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(168, 85, 247, 0.1), rgba(59, 130, 246, 0.3));
+  border-radius: 25px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.login-card:hover::before {
+  opacity: 1;
+}
+
+// 光晕脉冲动画
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4), 0 0 20px rgba(102, 126, 234, 0.1); }
+  50% { box-shadow: 0 4px 25px rgba(102, 126, 234, 0.6), 0 0 40px rgba(102, 126, 234, 0.2); }
+}
+
+// 社交图标发光
+.social-login .social-icon:hover {
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 </style>

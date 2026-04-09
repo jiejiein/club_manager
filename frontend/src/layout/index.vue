@@ -189,10 +189,16 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-/* 整体布局容器：占满整个视口高度 */
+/* 整体布局容器：占满整个视口高度 - 微妙网格渐变背景 */
 .layout-container {
   height: 100vh;
-  background: #f8fafc;
+  background:
+    radial-gradient(at 20% 20%, rgba(102, 126, 234, 0.04) 0%, transparent 50%),
+    radial-gradient(at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+    radial-gradient(at 50% 80%, rgba(6, 182, 212, 0.04) 0%, transparent 50%),
+    linear-gradient(135deg, #f8fafc 0%, #f0f4ff 50%, #f8fafc 100%);
+  background-size: 200% 200%, 200% 200%, 200% 200%, 100% 100%;
+  animation: meshMove 20s ease-in-out infinite;
 }
 
 /* 右侧区域容器：垂直排列（顶部导航 + 主内容） */
@@ -205,11 +211,11 @@ onUnmounted(() => {
 .main {
   flex: 1;
   padding: 0;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #f0f4ff 50%, #f8fafc 100%);
   overflow: hidden;
   position: relative;
 
-  /* 顶部装饰性渐变背景 */
+  /* 顶部装饰性渐变背景（左上角） */
   &::before {
     content: '';
     position: absolute;
@@ -217,7 +223,19 @@ onUnmounted(() => {
     left: 0;
     right: 0;
     height: 300px;
-    background: linear-gradient(180deg, rgba(102, 126, 234, 0.03) 0%, transparent 100%);
+    background: linear-gradient(180deg, rgba(102, 126, 234, 0.05) 0%, rgba(139, 92, 246, 0.02) 50%, transparent 100%);
+    pointer-events: none;
+  }
+
+  /* 右下角装饰性渐变 */
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, rgba(139, 92, 246, 0.03) 40%, transparent 70%);
     pointer-events: none;
   }
 }
@@ -230,24 +248,27 @@ onUnmounted(() => {
   position: relative;
   z-index: 1;
 
-  /* 自定义滚动条样式 */
+  /* 科技感滚动条样式 - 带渐变和发光 */
   &::-webkit-scrollbar {
     width: 8px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
+    background: linear-gradient(180deg, rgba(102, 126, 234, 0.4) 0%, rgba(139, 92, 246, 0.3) 50%, rgba(6, 182, 212, 0.4) 100%);
     border-radius: 4px;
     border: 2px solid transparent;
     background-clip: content-box;
+    box-shadow: 0 0 6px rgba(102, 126, 234, 0.15);
 
     &:hover {
-      background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+      background: linear-gradient(180deg, rgba(102, 126, 234, 0.6) 0%, rgba(139, 92, 246, 0.5) 50%, rgba(6, 182, 212, 0.6) 100%);
+      box-shadow: 0 0 12px rgba(102, 126, 234, 0.25);
     }
   }
 
   &::-webkit-scrollbar-track {
-    background: transparent;
+    background: rgba(248, 250, 252, 0.5);
+    border-radius: 4px;
   }
 
   &::-webkit-scrollbar-corner {
@@ -255,20 +276,20 @@ onUnmounted(() => {
   }
 }
 
-/* 页面切换动画：淡入 + 左右滑动 */
+/* 页面切换动画：淡入 + 缩放 + 左右滑动 - 增强版 */
 .fade-transform-enter-active,
 .fade-transform-leave-active {
-  transition: all 0.3s;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fade-transform-enter-from {
   opacity: 0;
-  transform: translateX(-20px);
+  transform: translateX(-20px) scale(0.98);
 }
 
 .fade-transform-leave-to {
   opacity: 0;
-  transform: translateX(20px);
+  transform: translateX(20px) scale(0.98);
 }
 
 /* 移动端适配 */
