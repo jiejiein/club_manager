@@ -3,9 +3,9 @@
 // ============================================
 
 // 主色调
-$primary-color: #667eea;
-$primary-light: #8b5cf6;
-$primary-dark: #5a67d8;
+$primary-color: #0284c7;
+$primary-light: #0ea5e9;
+$primary-dark: #0369a1;
 
 // 辅助色
 $success-color: #10b981;
@@ -27,30 +27,30 @@ $gray-900: #111827;
 
 // 科技感色彩
 $cyan: #06b6d4;
-$violet: #8b5cf6;
-$indigo: #6366f1;
+$violet: #0ea5e9;
+$indigo: #0284c7;
 $teal: #14b8a6;
 $fuchsia: #d946ef;
 $sky: #0ea5e9;
 $emerald: #10b981;
 
 // 渐变色
-$gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$gradient-primary: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
 $gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
 $gradient-warning: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
 $gradient-danger: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
 $gradient-info: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
 $gradient-cyan: linear-gradient(135deg, #06b6d4, #3b82f6);
 $gradient-rose: linear-gradient(135deg, #f43f5e, #ec4899);
-$gradient-violet: linear-gradient(135deg, #8b5cf6, #6366f1);
-$gradient-indigo: linear-gradient(135deg, #6366f1, #3b82f6);
+$gradient-violet: linear-gradient(135deg, #0ea5e9, #0284c7);
+$gradient-indigo: linear-gradient(135deg, #0284c7, #3b82f6);
 $gradient-teal: linear-gradient(135deg, #14b8a6, #06b6d4);
-$gradient-fuchsia: linear-gradient(135deg, #d946ef, #8b5cf6);
+$gradient-fuchsia: linear-gradient(135deg, #d946ef, #0ea5e9);
 $gradient-sunset: linear-gradient(135deg, #f59e0b, #ef4444, #ec4899);
-$gradient-ocean: linear-gradient(135deg, #06b6d4, #3b82f6, #8b5cf6);
-$gradient-aurora: linear-gradient(135deg, #06b6d4, #8b5cf6, #ec4899, #f59e0b);
+$gradient-ocean: linear-gradient(135deg, #06b6d4, #3b82f6, #0ea5e9);
+$gradient-aurora: linear-gradient(135deg, #06b6d4, #0ea5e9, #ec4899, #f59e0b);
 $gradient-mesh: radial-gradient(at 40% 20%, #06b6d4 0px, transparent 50%),
-               radial-gradient(at 80% 0%, #8b5cf6 0px, transparent 50%),
+               radial-gradient(at 80% 0%, #0ea5e9 0px, transparent 50%),
                radial-gradient(at 0% 50%, #3b82f6 0px, transparent 50%),
                radial-gradient(at 80% 50%, #ec4899 0px, transparent 50%),
                radial-gradient(at 0% 100%, #14b8a6 0px, transparent 50%),
@@ -117,21 +117,21 @@ $glass-blur: blur(20px);
 $glass-blur-strong: blur(30px);
 
 // 光影效果
-$glow-primary: 0 0 20px rgba(102, 126, 234, 0.4), 0 0 60px rgba(102, 126, 234, 0.1);
+$glow-primary: 0 0 20px rgba(2, 132, 199, 0.4), 0 0 60px rgba(2, 132, 199, 0.1);
 $glow-success: 0 0 20px rgba(16, 185, 129, 0.4), 0 0 60px rgba(16, 185, 129, 0.1);
 $glow-warning: 0 0 20px rgba(245, 158, 11, 0.4), 0 0 60px rgba(245, 158, 11, 0.1);
 $glow-danger: 0 0 20px rgba(239, 68, 68, 0.4), 0 0 60px rgba(239, 68, 68, 0.1);
 $glow-cyan: 0 0 20px rgba(6, 182, 212, 0.4), 0 0 60px rgba(6, 182, 212, 0.1);
-$glow-violet: 0 0 20px rgba(139, 92, 246, 0.4), 0 0 60px rgba(139, 92, 246, 0.1);
-$glow-indigo: 0 0 20px rgba(99, 102, 241, 0.4), 0 0 60px rgba(99, 102, 241, 0.1);
+$glow-violet: 0 0 20px rgba(14, 165, 233, 0.4), 0 0 60px rgba(14, 165, 233, 0.1);
+$glow-indigo: 0 0 20px rgba(2, 132, 199, 0.4), 0 0 60px rgba(2, 132, 199, 0.1);
 
 // 科技感阴影
-$shadow-glow: 0 0 30px rgba(102, 126, 234, 0.15), 0 8px 32px rgba(0, 0, 0, 0.08);
-$shadow-glow-lg: 0 0 40px rgba(102, 126, 234, 0.2), 0 16px 48px rgba(0, 0, 0, 0.12);
-$shadow-neon: 0 0 5px rgba(102, 126, 234, 0.5), 0 0 20px rgba(102, 126, 234, 0.3), 0 0 40px rgba(102, 126, 234, 0.1);
-$shadow-inset-glow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 0 20px rgba(102, 126, 234, 0.05);
+$shadow-glow: 0 0 30px rgba(2, 132, 199, 0.15), 0 8px 32px rgba(0, 0, 0, 0.08);
+$shadow-glow-lg: 0 0 40px rgba(2, 132, 199, 0.2), 0 16px 48px rgba(0, 0, 0, 0.12);
+$shadow-neon: 0 0 5px rgba(2, 132, 199, 0.5), 0 0 20px rgba(2, 132, 199, 0.3), 0 0 40px rgba(2, 132, 199, 0.1);
+$shadow-inset-glow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 0 20px rgba(2, 132, 199, 0.05);
 
 // 科技感边框
-$border-glow: 1px solid rgba(102, 126, 234, 0.3);
+$border-glow: 1px solid rgba(2, 132, 199, 0.3);
 $border-glass: 1px solid rgba(255, 255, 255, 0.18);
-$border-gradient: linear-gradient(135deg, rgba(102, 126, 234, 0.4), rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.4));
+$border-gradient: linear-gradient(135deg, rgba(2, 132, 199, 0.4), rgba(14, 165, 233, 0.2), rgba(6, 182, 212, 0.4));

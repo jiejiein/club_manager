@@ -299,8 +299,8 @@ onMounted(() => {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+    background: radial-gradient(ellipse at 20% 50%, rgba(2, 132, 199, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 50%),
                 radial-gradient(ellipse at 40% 80%, rgba(59, 130, 246, 0.04) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
@@ -327,12 +327,12 @@ onMounted(() => {
     -webkit-backdrop-filter: blur(20px);
     border-radius: 14px;
     border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 24px rgba(99, 102, 241, 0.06);
+    box-shadow: 0 4px 24px rgba(2, 132, 199, 0.06);
     transition: all 0.3s ease;
 
     &:hover {
       background: rgba(255, 255, 255, 0.75);
-      box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+      box-shadow: 0 8px 32px rgba(2, 132, 199, 0.1);
     }
   }
 
@@ -353,7 +353,7 @@ onMounted(() => {
       inset: 0;
       border-radius: 16px;
       padding: 1.5px;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.1));
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.4), rgba(56, 189, 248, 0.3), rgba(59, 130, 246, 0.2), rgba(2, 132, 199, 0.1));
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
@@ -362,7 +362,7 @@ onMounted(() => {
     }
 
     &:hover::before {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.6), rgba(168, 85, 247, 0.5), rgba(59, 130, 246, 0.4), rgba(99, 102, 241, 0.3));
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.6), rgba(56, 189, 248, 0.5), rgba(59, 130, 246, 0.4), rgba(2, 132, 199, 0.3));
     }
   }
 
@@ -370,7 +370,7 @@ onMounted(() => {
   :deep(.el-card__header) {
     position: relative;
     padding: 16px 20px;
-    border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+    border-bottom: 1px solid rgba(2, 132, 199, 0.08);
 
     &::before {
       content: '';
@@ -380,8 +380,8 @@ onMounted(() => {
       bottom: 12px;
       width: 4px;
       border-radius: 4px;
-      background: linear-gradient(180deg, #6366f1, #a855f7, #3b82f6);
-      box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+      background: linear-gradient(180deg, #0284c7, #38bdf8, #3b82f6);
+      box-shadow: 0 0 12px rgba(2, 132, 199, 0.3);
     }
   }
 
@@ -400,7 +400,7 @@ onMounted(() => {
     overflow: hidden;
 
     th.el-table__cell {
-      background: rgba(99, 102, 241, 0.04) !important;
+      background: rgba(2, 132, 199, 0.04) !important;
       color: #475569;
       font-weight: 600;
       font-size: 13px;
@@ -410,12 +410,12 @@ onMounted(() => {
       transition: all 0.3s ease;
 
       &:hover > td.el-table__cell {
-        background: linear-gradient(90deg, rgba(99, 102, 241, 0.04), rgba(168, 85, 247, 0.04), rgba(59, 130, 246, 0.02)) !important;
+        background: linear-gradient(90deg, rgba(2, 132, 199, 0.04), rgba(56, 189, 248, 0.04), rgba(59, 130, 246, 0.02)) !important;
       }
     }
 
     .el-table__body tr.el-table__row--striped td.el-table__cell {
-      background: rgba(99, 102, 241, 0.02);
+      background: rgba(2, 132, 199, 0.02);
     }
   }
 
@@ -439,7 +439,7 @@ onMounted(() => {
     transition: all 0.3s ease;
 
     &:hover {
-      box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+      box-shadow: 0 0 20px rgba(2, 132, 199, 0.35);
       transform: translateY(-1px);
     }
   }
@@ -460,7 +460,7 @@ onMounted(() => {
       left: 0;
       right: 0;
       height: 3px;
-      background: linear-gradient(90deg, #6366f1, #a855f7, #3b82f6, #6366f1);
+      background: linear-gradient(90deg, #0284c7, #38bdf8, #3b82f6, #0284c7);
       background-size: 200% 100%;
       animation: borderFlow 3s linear infinite;
     }
@@ -468,7 +468,7 @@ onMounted(() => {
 
   :deep(.el-dialog__header) {
     padding: 20px 24px 16px;
-    border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+    border-bottom: 1px solid rgba(2, 132, 199, 0.08);
   }
 
   :deep(.el-dialog__body) {
@@ -485,8 +485,8 @@ onMounted(() => {
       transition: all 0.3s ease;
 
       &.is-active {
-        background: linear-gradient(135deg, #6366f1, #a855f7);
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        background: linear-gradient(135deg, #0284c7, #38bdf8);
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
       }
     }
   }

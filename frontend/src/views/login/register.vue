@@ -110,7 +110,7 @@ const handleRegister = async () => {
   &::before {
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.5), transparent 70%);
+    background: radial-gradient(circle, rgba(2, 132, 199, 0.5), transparent 70%);
     top: -100px;
     right: -100px;
     animation-delay: 0s;
@@ -119,7 +119,7 @@ const handleRegister = async () => {
   &::after {
     width: 350px;
     height: 350px;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.4), transparent 70%);
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.4), transparent 70%);
     bottom: -80px;
     left: -80px;
     animation-delay: -4s;
@@ -136,7 +136,7 @@ const handleRegister = async () => {
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4),
     0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-    0 0 80px rgba(99, 102, 241, 0.1);
+    0 0 80px rgba(2, 132, 199, 0.1);
   animation: cardSlideUp 0.6s ease-out;
   position: relative;
   z-index: 1;
@@ -149,7 +149,7 @@ const handleRegister = async () => {
     left: 20%;
     right: 20%;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #818cf8, #a855f7, #818cf8, transparent);
+    background: linear-gradient(90deg, transparent, #38bdf8, #0ea5e9, #38bdf8, transparent);
     border-radius: 2px;
   }
 
@@ -160,7 +160,7 @@ const handleRegister = async () => {
     font-size: 22px;
     font-weight: 700;
     letter-spacing: 1px;
-    text-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+    text-shadow: 0 2px 10px rgba(2, 132, 199, 0.3);
   }
 
   // 输入框聚焦发光效果
@@ -171,13 +171,13 @@ const handleRegister = async () => {
     transition: all 0.3s ease;
 
     &:hover {
-      border-color: rgba(129, 140, 248, 0.3);
+      border-color: rgba(56, 189, 248, 0.3);
     }
 
     &.is-focus {
-      border-color: #818cf8;
-      box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15),
-        0 0 20px rgba(129, 140, 248, 0.1);
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15),
+        0 0 20px rgba(56, 189, 248, 0.1);
       background: rgba(255, 255, 255, 0.08);
     }
   }
@@ -206,7 +206,7 @@ const handleRegister = async () => {
   .register-btn {
     width: 100%;
     height: 44px;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 50%, #38bdf8 100%);
     border: none;
     color: #fff;
     font-size: 15px;
@@ -231,7 +231,7 @@ const handleRegister = async () => {
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 8px 25px rgba(2, 132, 199, 0.4);
 
       &::before {
         left: 100%;

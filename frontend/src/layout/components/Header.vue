@@ -246,8 +246,8 @@ const handleLogout = () => {
     left: 10%;
     right: 10%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.3), rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.3), transparent);
-    box-shadow: 0 0 8px rgba(102, 126, 234, 0.15), 0 0 20px rgba(102, 126, 234, 0.05);
+    background: linear-gradient(90deg, transparent, rgba(2, 132, 199, 0.3), rgba(14, 165, 233, 0.2), rgba(6, 182, 212, 0.3), transparent);
+    box-shadow: 0 0 8px rgba(2, 132, 199, 0.15), 0 0 20px rgba(2, 132, 199, 0.05);
   }
 }
 
@@ -274,10 +274,10 @@ const handleLogout = () => {
 
   /* 悬停效果：渐变背景 + 阴影 + 发光 */
   &:hover {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
     color: #fff;
     border-color: transparent;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35), 0 0 20px rgba(102, 126, 234, 0.15);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35), 0 0 20px rgba(2, 132, 199, 0.15);
     transform: translateY(-2px);
   }
 
@@ -298,7 +298,7 @@ const handleLogout = () => {
         color: #64748b;
 
         &:hover {
-          color: #667eea;
+          color: #0284c7;
         }
       }
     }
@@ -341,7 +341,7 @@ const handleLogout = () => {
     left: 50%;
     width: 0;
     height: 0;
-    background: rgba(102, 126, 234, 0.1);
+    background: rgba(2, 132, 199, 0.1);
     border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: width 0.4s, height 0.4s;
@@ -349,10 +349,10 @@ const handleLogout = () => {
 
   &:hover {
     background: #fff;
-    color: #667eea;
-    border-color: rgba(102, 126, 234, 0.4);
+    color: #0284c7;
+    border-color: rgba(2, 132, 199, 0.4);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15), 0 0 15px rgba(102, 126, 234, 0.08);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15), 0 0 15px rgba(2, 132, 199, 0.08);
 
     &::before {
       width: 60px;
@@ -408,8 +408,8 @@ const handleLogout = () => {
     background: #fff;
     border-color: transparent;
     box-shadow:
-      0 4px 12px rgba(102, 126, 234, 0.12),
-      0 0 20px rgba(102, 126, 234, 0.06);
+      0 4px 12px rgba(2, 132, 199, 0.12),
+      0 0 20px rgba(2, 132, 199, 0.06);
 
     /* 渐变边框效果 */
     &::before {
@@ -418,7 +418,7 @@ const handleLogout = () => {
       inset: 0;
       border-radius: 12px;
       padding: 1px;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.4), rgba(139, 92, 246, 0.3), rgba(6, 182, 212, 0.4));
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.4), rgba(14, 165, 233, 0.3), rgba(6, 182, 212, 0.4));
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
@@ -427,12 +427,12 @@ const handleLogout = () => {
 
     .user-avatar {
       transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
     }
 
     .dropdown-arrow {
       transform: rotate(180deg);
-      color: #667eea;
+      color: #0284c7;
     }
   }
 }
@@ -440,11 +440,11 @@ const handleLogout = () => {
 /* 用户头像 */
 .user-avatar {
   border: 2px solid #fff;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
   color: #fff;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
 }
 
 /* 用户元信息：昵称 + 角色 */
@@ -488,7 +488,7 @@ const handleLogout = () => {
 
     &:hover {
       background: #f1f5f9;
-      color: #667eea;
+      color: #0284c7;
     }
 
     .el-icon {

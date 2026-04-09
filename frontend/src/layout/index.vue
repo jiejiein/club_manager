@@ -193,8 +193,8 @@ onUnmounted(() => {
 .layout-container {
   height: 100vh;
   background:
-    radial-gradient(at 20% 20%, rgba(102, 126, 234, 0.04) 0%, transparent 50%),
-    radial-gradient(at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+    radial-gradient(at 20% 20%, rgba(2, 132, 199, 0.04) 0%, transparent 50%),
+    radial-gradient(at 80% 20%, rgba(14, 165, 233, 0.03) 0%, transparent 50%),
     radial-gradient(at 50% 80%, rgba(6, 182, 212, 0.04) 0%, transparent 50%),
     linear-gradient(135deg, #f8fafc 0%, #f0f4ff 50%, #f8fafc 100%);
   background-size: 200% 200%, 200% 200%, 200% 200%, 100% 100%;
@@ -223,7 +223,7 @@ onUnmounted(() => {
     left: 0;
     right: 0;
     height: 300px;
-    background: linear-gradient(180deg, rgba(102, 126, 234, 0.05) 0%, rgba(139, 92, 246, 0.02) 50%, transparent 100%);
+    background: linear-gradient(180deg, rgba(2, 132, 199, 0.05) 0%, rgba(14, 165, 233, 0.02) 50%, transparent 100%);
     pointer-events: none;
   }
 
@@ -235,7 +235,7 @@ onUnmounted(() => {
     right: 0;
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, rgba(139, 92, 246, 0.03) 40%, transparent 70%);
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, rgba(14, 165, 233, 0.03) 40%, transparent 70%);
     pointer-events: none;
   }
 }
@@ -254,15 +254,15 @@ onUnmounted(() => {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, rgba(102, 126, 234, 0.4) 0%, rgba(139, 92, 246, 0.3) 50%, rgba(6, 182, 212, 0.4) 100%);
+    background: linear-gradient(180deg, rgba(2, 132, 199, 0.4) 0%, rgba(14, 165, 233, 0.3) 50%, rgba(6, 182, 212, 0.4) 100%);
     border-radius: 4px;
     border: 2px solid transparent;
     background-clip: content-box;
-    box-shadow: 0 0 6px rgba(102, 126, 234, 0.15);
+    box-shadow: 0 0 6px rgba(2, 132, 199, 0.15);
 
     &:hover {
-      background: linear-gradient(180deg, rgba(102, 126, 234, 0.6) 0%, rgba(139, 92, 246, 0.5) 50%, rgba(6, 182, 212, 0.6) 100%);
-      box-shadow: 0 0 12px rgba(102, 126, 234, 0.25);
+      background: linear-gradient(180deg, rgba(2, 132, 199, 0.6) 0%, rgba(14, 165, 233, 0.5) 50%, rgba(6, 182, 212, 0.6) 100%);
+      box-shadow: 0 0 12px rgba(2, 132, 199, 0.25);
     }
   }
 

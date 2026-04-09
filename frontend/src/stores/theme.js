@@ -12,7 +12,7 @@ export const useThemeStore = defineStore('theme', () => {
   // 可用的主题列表
   const themes = [
     { id: 'light', name: '日间模式', icon: 'Sunny', color: '#f5a623' },
-    { id: 'dark', name: '夜间模式', icon: 'Moon', color: '#667eea' },
+    { id: 'dark', name: '夜间模式', icon: 'Moon', color: '#0284c7' },
     { id: 'auto', name: '跟随系统', icon: 'Monitor', color: '#43e97b' }
   ]
 

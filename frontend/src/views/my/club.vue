@@ -240,7 +240,7 @@ const availableClubs = computed(() => {
 // 获取社团颜色
 const getClubColor = (typeId) => {
   const colors = {
-    1: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    1: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
     2: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
     3: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
     4: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
@@ -389,7 +389,7 @@ onMounted(() => {
 
   /* ========== 欢迎横幅流动渐变动画 ========== */
   .welcome-banner {
-    background: linear-gradient(135deg, #6366f1, #a855f7, #3b82f6, #6366f1, #a855f7);
+    background: linear-gradient(135deg, #0284c7, #38bdf8, #3b82f6, #0284c7, #38bdf8);
     background-size: 300% 300%;
     animation: gradientFlow 8s ease infinite;
     border-radius: 16px;
@@ -473,7 +473,7 @@ onMounted(() => {
       inset: 0;
       border-radius: 16px;
       padding: 1.5px;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.2));
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.4), rgba(56, 189, 248, 0.3), rgba(59, 130, 246, 0.2));
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
@@ -483,7 +483,7 @@ onMounted(() => {
     :deep(.el-card__header) {
       position: relative;
       padding: 16px 20px;
-      border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+      border-bottom: 1px solid rgba(2, 132, 199, 0.08);
 
       &::before {
         content: '';
@@ -493,8 +493,8 @@ onMounted(() => {
         bottom: 12px;
         width: 4px;
         border-radius: 4px;
-        background: linear-gradient(180deg, #6366f1, #a855f7, #3b82f6);
-        box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+        background: linear-gradient(180deg, #0284c7, #38bdf8, #3b82f6);
+        box-shadow: 0 0 12px rgba(2, 132, 199, 0.3);
       }
     }
 
@@ -512,7 +512,7 @@ onMounted(() => {
         color: #1e293b;
 
         .el-icon {
-          color: #6366f1;
+          color: #0284c7;
         }
       }
     }
@@ -536,7 +536,7 @@ onMounted(() => {
       inset: 0;
       border-radius: 12px;
       padding: 1.5px;
-      background: linear-gradient(135deg, var(--card-color, #6366f1), rgba(99, 102, 241, 0.2), var(--card-color, #a855f7));
+      background: linear-gradient(135deg, var(--card-color, #0284c7), rgba(2, 132, 199, 0.2), var(--card-color, #38bdf8));
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
@@ -547,7 +547,7 @@ onMounted(() => {
 
     &:hover {
       transform: translateY(-6px) rotateX(2deg);
-      box-shadow: 0 16px 40px rgba(99, 102, 241, 0.15), 0 0 0 1px rgba(99, 102, 241, 0.1);
+      box-shadow: 0 16px 40px rgba(2, 132, 199, 0.15), 0 0 0 1px rgba(2, 132, 199, 0.1);
 
       &::before {
         opacity: 1;
@@ -569,16 +569,16 @@ onMounted(() => {
         align-items: center;
         justify-content: center;
         color: #fff;
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
       }
 
       .club-badge {
         padding: 4px 12px;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(168, 85, 247, 0.08));
+        background: linear-gradient(135deg, rgba(2, 132, 199, 0.08), rgba(56, 189, 248, 0.08));
         border-radius: 20px;
         font-size: 12px;
-        color: #6366f1;
-        border: 1px solid rgba(99, 102, 241, 0.12);
+        color: #0284c7;
+        border: 1px solid rgba(2, 132, 199, 0.12);
       }
     }
 
@@ -615,7 +615,7 @@ onMounted(() => {
         color: #64748b;
 
         .el-icon {
-          color: #6366f1;
+          color: #0284c7;
         }
       }
     }
@@ -625,13 +625,13 @@ onMounted(() => {
       justify-content: space-between;
       align-items: center;
       padding-top: 16px;
-      border-top: 1px solid rgba(99, 102, 241, 0.06);
+      border-top: 1px solid rgba(2, 132, 199, 0.06);
 
       .el-button--primary {
         transition: all 0.3s ease;
 
         &:hover {
-          box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+          box-shadow: 0 0 20px rgba(2, 132, 199, 0.35);
           transform: translateY(-1px);
         }
       }
@@ -647,7 +647,7 @@ onMounted(() => {
     padding: 24px;
     margin-bottom: 24px;
     border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 24px rgba(99, 102, 241, 0.06);
+    box-shadow: 0 4px 24px rgba(2, 132, 199, 0.06);
 
     .club-option {
       display: flex;
@@ -685,7 +685,7 @@ onMounted(() => {
       overflow: hidden;
 
       th.el-table__cell {
-        background: rgba(99, 102, 241, 0.04) !important;
+        background: rgba(2, 132, 199, 0.04) !important;
         color: #475569;
         font-weight: 600;
       }
@@ -694,7 +694,7 @@ onMounted(() => {
         transition: all 0.3s ease;
 
         &:hover > td.el-table__cell {
-          background: linear-gradient(90deg, rgba(99, 102, 241, 0.04), rgba(168, 85, 247, 0.04)) !important;
+          background: linear-gradient(90deg, rgba(2, 132, 199, 0.04), rgba(56, 189, 248, 0.04)) !important;
         }
       }
     }
@@ -724,7 +724,7 @@ onMounted(() => {
       left: 0;
       right: 0;
       height: 3px;
-      background: linear-gradient(90deg, #6366f1, #a855f7, #3b82f6, #6366f1);
+      background: linear-gradient(90deg, #0284c7, #38bdf8, #3b82f6, #0284c7);
       background-size: 200% 100%;
       animation: borderFlow 3s linear infinite;
     }
@@ -744,7 +744,7 @@ onMounted(() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+        box-shadow: 0 8px 24px rgba(2, 132, 199, 0.3);
       }
 
       .detail-info {

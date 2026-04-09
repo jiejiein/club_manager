@@ -76,11 +76,11 @@ const themeStore = useThemeStore()
   }
 
   &.is-dark {
-    background: rgba(102, 126, 234, 0.2);
-    border-color: rgba(102, 126, 234, 0.4);
+    background: rgba(2, 132, 199, 0.2);
+    border-color: rgba(2, 132, 199, 0.4);
     
     &:hover {
-      background: rgba(102, 126, 234, 0.3);
+      background: rgba(2, 132, 199, 0.3);
     }
   }
 }
@@ -190,7 +190,7 @@ const themeStore = useThemeStore()
       background: #1a2a3a;
       
       .theme-name {
-        color: #667eea;
+        color: #0284c7;
       }
     }
   }

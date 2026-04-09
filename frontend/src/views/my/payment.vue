@@ -295,7 +295,7 @@ onMounted(() => {
 
   /* ========== 欢迎横幅流动渐变动画 ========== */
   .welcome-banner {
-    background: linear-gradient(135deg, #6366f1, #a855f7, #3b82f6, #6366f1, #a855f7);
+    background: linear-gradient(135deg, #0284c7, #38bdf8, #3b82f6, #0284c7, #38bdf8);
     background-size: 300% 300%;
     animation: gradientFlow 8s ease infinite;
     border-radius: 16px;
@@ -379,7 +379,7 @@ onMounted(() => {
       inset: 0;
       border-radius: 16px;
       padding: 1.5px;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.2));
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.4), rgba(56, 189, 248, 0.3), rgba(59, 130, 246, 0.2));
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
@@ -389,7 +389,7 @@ onMounted(() => {
     :deep(.el-card__header) {
       position: relative;
       padding: 16px 20px;
-      border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+      border-bottom: 1px solid rgba(2, 132, 199, 0.08);
 
       &::before {
         content: '';
@@ -399,8 +399,8 @@ onMounted(() => {
         bottom: 12px;
         width: 4px;
         border-radius: 4px;
-        background: linear-gradient(180deg, #6366f1, #a855f7, #3b82f6);
-        box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+        background: linear-gradient(180deg, #0284c7, #38bdf8, #3b82f6);
+        box-shadow: 0 0 12px rgba(2, 132, 199, 0.3);
       }
     }
 
@@ -418,7 +418,7 @@ onMounted(() => {
         color: #1e293b;
 
         .el-icon {
-          color: #6366f1;
+          color: #0284c7;
         }
       }
     }
@@ -505,7 +505,7 @@ onMounted(() => {
       margin-bottom: 8px;
 
       .el-icon {
-        color: #6366f1;
+        color: #0284c7;
       }
     }
 
@@ -563,13 +563,13 @@ onMounted(() => {
   /* ========== 时间线渐变色节点 ========== */
   :deep(.el-timeline) {
     .el-timeline-item__node {
-      background: linear-gradient(135deg, #6366f1, #a855f7);
-      box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      box-shadow: 0 0 12px rgba(2, 132, 199, 0.3);
     }
 
     .el-timeline-item__tail {
-      border-left: 2px solid linear-gradient(180deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.1));
-      border-left-color: rgba(99, 102, 241, 0.15);
+      border-left: 2px solid linear-gradient(180deg, rgba(2, 132, 199, 0.3), rgba(56, 189, 248, 0.1));
+      border-left-color: rgba(2, 132, 199, 0.15);
     }
   }
 
@@ -578,14 +578,14 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px;
-    background: rgba(99, 102, 241, 0.03);
+    background: rgba(2, 132, 199, 0.03);
     border-radius: 10px;
-    border: 1px solid rgba(99, 102, 241, 0.06);
+    border: 1px solid rgba(2, 132, 199, 0.06);
     transition: all 0.3s ease;
 
     &:hover {
-      background: rgba(99, 102, 241, 0.06);
-      border-color: rgba(99, 102, 241, 0.12);
+      background: rgba(2, 132, 199, 0.06);
+      border-color: rgba(2, 132, 199, 0.12);
     }
 
     .record-info {
@@ -634,7 +634,7 @@ onMounted(() => {
       left: 0;
       right: 0;
       height: 3px;
-      background: linear-gradient(90deg, #6366f1, #a855f7, #3b82f6, #6366f1);
+      background: linear-gradient(90deg, #0284c7, #38bdf8, #3b82f6, #0284c7);
       background-size: 200% 100%;
       animation: borderFlow 3s linear infinite;
     }
@@ -662,11 +662,11 @@ onMounted(() => {
 
     .pay-info {
       text-align: left;
-      background: rgba(99, 102, 241, 0.03);
+      background: rgba(2, 132, 199, 0.03);
       padding: 16px;
       border-radius: 10px;
       margin-bottom: 20px;
-      border: 1px solid rgba(99, 102, 241, 0.06);
+      border: 1px solid rgba(2, 132, 199, 0.06);
 
       p {
         margin: 0 0 8px;
@@ -702,21 +702,21 @@ onMounted(() => {
           align-items: center;
           gap: 12px;
           padding: 12px 16px;
-          border: 2px solid rgba(99, 102, 241, 0.1);
+          border: 2px solid rgba(2, 132, 199, 0.1);
           border-radius: 10px;
           cursor: pointer;
           transition: all 0.3s;
           background: rgba(255, 255, 255, 0.6);
 
           &:hover {
-            border-color: rgba(99, 102, 241, 0.25);
-            background: rgba(99, 102, 241, 0.04);
+            border-color: rgba(2, 132, 199, 0.25);
+            background: rgba(2, 132, 199, 0.04);
           }
 
           &.active {
-            border-color: #6366f1;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(168, 85, 247, 0.06));
-            box-shadow: 0 0 16px rgba(99, 102, 241, 0.12);
+            border-color: #0284c7;
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.06), rgba(56, 189, 248, 0.06));
+            box-shadow: 0 0 16px rgba(2, 132, 199, 0.12);
           }
 
           span {

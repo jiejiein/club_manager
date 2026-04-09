@@ -235,7 +235,7 @@ const filteredActivities = computed(() => {
 // 获取活动渐变背景
 const getActivityGradient = (id) => {
   const gradients = [
-    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
     'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
     'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
     'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
@@ -378,7 +378,7 @@ onMounted(() => {
 
   /* ========== 欢迎横幅流动渐变动画 ========== */
   .welcome-banner {
-    background: linear-gradient(135deg, #6366f1, #a855f7, #3b82f6, #6366f1, #a855f7);
+    background: linear-gradient(135deg, #0284c7, #38bdf8, #3b82f6, #0284c7, #38bdf8);
     background-size: 300% 300%;
     animation: gradientFlow 8s ease infinite;
     border-radius: 16px;
@@ -461,7 +461,7 @@ onMounted(() => {
       inset: 0;
       border-radius: 16px;
       padding: 1.5px;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.15));
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.3), rgba(56, 189, 248, 0.2), rgba(59, 130, 246, 0.15));
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
@@ -490,18 +490,18 @@ onMounted(() => {
           transition: all 0.3s;
           font-size: 14px;
           color: #64748b;
-          background: rgba(99, 102, 241, 0.04);
+          background: rgba(2, 132, 199, 0.04);
           border: 1px solid transparent;
 
           &:hover {
-            background: rgba(99, 102, 241, 0.08);
-            border-color: rgba(99, 102, 241, 0.1);
+            background: rgba(2, 132, 199, 0.08);
+            border-color: rgba(2, 132, 199, 0.1);
           }
 
           &.active {
-            background: linear-gradient(135deg, #6366f1, #a855f7);
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
             color: #fff;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
+            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
             border-color: transparent;
           }
 
@@ -516,14 +516,14 @@ onMounted(() => {
 
         :deep(.el-input__wrapper) {
           border-radius: 20px;
-          background: rgba(99, 102, 241, 0.04);
+          background: rgba(2, 132, 199, 0.04);
           box-shadow: none;
-          border: 1px solid rgba(99, 102, 241, 0.08);
+          border: 1px solid rgba(2, 132, 199, 0.08);
           transition: all 0.3s;
 
           &:hover, &.is-focus {
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+            border-color: rgba(2, 132, 199, 0.3);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.08);
           }
         }
       }
@@ -548,7 +548,7 @@ onMounted(() => {
         inset: 0;
         border-radius: 12px;
         padding: 1.5px;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.3));
+        background: linear-gradient(135deg, rgba(2, 132, 199, 0.4), rgba(56, 189, 248, 0.2), rgba(59, 130, 246, 0.3));
         -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
@@ -559,7 +559,7 @@ onMounted(() => {
 
       &:hover {
         transform: translateY(-6px) rotateX(2deg);
-        box-shadow: 0 16px 40px rgba(99, 102, 241, 0.15), 0 0 0 1px rgba(99, 102, 241, 0.1);
+        box-shadow: 0 16px 40px rgba(2, 132, 199, 0.15), 0 0 0 1px rgba(2, 132, 199, 0.1);
 
         &::before {
           opacity: 1;
@@ -621,7 +621,7 @@ onMounted(() => {
           margin-bottom: 12px;
 
           .el-icon {
-            color: #6366f1;
+            color: #0284c7;
           }
         }
 
@@ -661,13 +661,13 @@ onMounted(() => {
           justify-content: space-between;
           align-items: center;
           padding-top: 12px;
-          border-top: 1px solid rgba(99, 102, 241, 0.06);
+          border-top: 1px solid rgba(2, 132, 199, 0.06);
 
           .el-button--primary {
             transition: all 0.3s ease;
 
             &:hover {
-              box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+              box-shadow: 0 0 20px rgba(2, 132, 199, 0.35);
               transform: translateY(-1px);
             }
           }
@@ -692,7 +692,7 @@ onMounted(() => {
       left: 0;
       right: 0;
       height: 3px;
-      background: linear-gradient(90deg, #6366f1, #a855f7, #3b82f6, #6366f1);
+      background: linear-gradient(90deg, #0284c7, #38bdf8, #3b82f6, #0284c7);
       background-size: 200% 100%;
       animation: borderFlow 3s linear infinite;
     }

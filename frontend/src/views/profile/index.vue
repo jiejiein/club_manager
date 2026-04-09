@@ -204,7 +204,7 @@ onMounted(() => {
       inset: 0;
       border-radius: 16px;
       padding: 1.5px;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.2));
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.4), rgba(56, 189, 248, 0.3), rgba(59, 130, 246, 0.2));
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
@@ -216,7 +216,7 @@ onMounted(() => {
   :deep(.el-card__header) {
     position: relative;
     padding: 16px 20px;
-    border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+    border-bottom: 1px solid rgba(2, 132, 199, 0.08);
 
     &::before {
       content: '';
@@ -226,8 +226,8 @@ onMounted(() => {
       bottom: 12px;
       width: 4px;
       border-radius: 4px;
-      background: linear-gradient(180deg, #6366f1, #a855f7, #3b82f6);
-      box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+      background: linear-gradient(180deg, #0284c7, #38bdf8, #3b82f6);
+      box-shadow: 0 0 12px rgba(2, 132, 199, 0.3);
     }
   }
 
@@ -248,7 +248,7 @@ onMounted(() => {
       gap: 20px;
       margin-bottom: 30px;
       padding-bottom: 20px;
-      border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+      border-bottom: 1px solid rgba(2, 132, 199, 0.08);
 
       :deep(.el-avatar) {
         border: 3px solid transparent;
@@ -256,10 +256,10 @@ onMounted(() => {
         position: relative;
         box-shadow: 0 0 0 3px transparent;
 
-        background-image: linear-gradient(#fff, #fff), linear-gradient(135deg, #6366f1, #a855f7, #3b82f6);
+        background-image: linear-gradient(#fff, #fff), linear-gradient(135deg, #0284c7, #38bdf8, #3b82f6);
         background-origin: border-box;
         background-clip: padding-box, border-box;
-        box-shadow: 0 0 20px rgba(99, 102, 241, 0.2), 0 0 0 3px transparent;
+        box-shadow: 0 0 20px rgba(2, 132, 199, 0.2), 0 0 0 3px transparent;
         animation: avatarGlow 3s ease-in-out infinite;
       }
 
@@ -285,21 +285,21 @@ onMounted(() => {
         -webkit-backdrop-filter: blur(12px);
 
         .el-table__header-wrapper th {
-          background-color: rgba(99, 102, 241, 0.04) !important;
+          background-color: rgba(2, 132, 199, 0.04) !important;
           color: #475569;
           font-weight: 600;
         }
 
         .el-table__body-wrapper {
           .el-table__row:nth-child(odd) {
-            background-color: rgba(99, 102, 241, 0.02);
+            background-color: rgba(2, 132, 199, 0.02);
           }
 
           .el-table__row {
             transition: all 0.3s ease;
 
             &:hover > td.el-table__cell {
-              background: linear-gradient(90deg, rgba(99, 102, 241, 0.04), rgba(168, 85, 247, 0.04)) !important;
+              background: linear-gradient(90deg, rgba(2, 132, 199, 0.04), rgba(56, 189, 248, 0.04)) !important;
             }
           }
         }
@@ -315,19 +315,19 @@ onMounted(() => {
       -webkit-backdrop-filter: blur(20px);
       border-radius: 14px;
       border: 1px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 4px 24px rgba(99, 102, 241, 0.06);
+      box-shadow: 0 4px 24px rgba(2, 132, 199, 0.06);
 
       :deep(.el-input__wrapper) {
         border-radius: 8px;
         transition: all 0.3s ease;
-        box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.1) inset;
+        box-shadow: 0 0 0 1px rgba(2, 132, 199, 0.1) inset;
 
         &:hover {
-          box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.2) inset;
+          box-shadow: 0 0 0 1px rgba(2, 132, 199, 0.2) inset;
         }
 
         &.is-focus {
-          box-shadow: 0 0 0 1px #6366f1 inset, 0 0 0 3px rgba(99, 102, 241, 0.1);
+          box-shadow: 0 0 0 1px #0284c7 inset, 0 0 0 3px rgba(2, 132, 199, 0.1);
         }
       }
 
@@ -335,7 +335,7 @@ onMounted(() => {
         transition: all 0.3s ease;
 
         &:hover {
-          box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+          box-shadow: 0 0 20px rgba(2, 132, 199, 0.35);
           transform: translateY(-1px);
         }
       }
@@ -346,11 +346,11 @@ onMounted(() => {
   .notification-list {
     .notification-item {
       padding: 12px 0;
-      border-bottom: 1px solid rgba(99, 102, 241, 0.06);
+      border-bottom: 1px solid rgba(2, 132, 199, 0.06);
       transition: all 0.3s ease;
 
       &:hover {
-        background: rgba(99, 102, 241, 0.02);
+        background: rgba(2, 132, 199, 0.02);
         border-radius: 8px;
         padding-left: 8px;
         padding-right: 8px;
@@ -377,10 +377,10 @@ onMounted(() => {
 
 @keyframes avatarGlow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.2), 0 0 0 3px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 20px rgba(2, 132, 199, 0.2), 0 0 0 3px rgba(2, 132, 199, 0.1);
   }
   50% {
-    box-shadow: 0 0 30px rgba(99, 102, 241, 0.35), 0 0 0 3px rgba(168, 85, 247, 0.2);
+    box-shadow: 0 0 30px rgba(2, 132, 199, 0.35), 0 0 0 3px rgba(56, 189, 248, 0.2);
   }
 }
 </style>

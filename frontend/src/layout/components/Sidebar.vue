@@ -277,7 +277,7 @@ const userRole = computed(() => userStore.userInfo?.role)
     left: 0;
     right: 0;
     height: 200px;
-    background: linear-gradient(180deg, rgba(102, 126, 234, 0.12) 0%, rgba(139, 92, 246, 0.05) 50%, transparent 100%);
+    background: linear-gradient(180deg, rgba(2, 132, 199, 0.12) 0%, rgba(14, 165, 233, 0.05) 50%, transparent 100%);
     pointer-events: none;
   }
 
@@ -311,19 +311,19 @@ const userRole = computed(() => userStore.userInfo?.role)
 .logo-icon {
   width: 42px;
   height: 42px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
   transition: all 0.3s ease;
   animation: glowPulse 3s ease-in-out infinite;
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.2);
+    box-shadow: 0 6px 20px rgba(2, 132, 199, 0.6), 0 0 30px rgba(2, 132, 199, 0.2);
   }
 }
 
@@ -425,7 +425,7 @@ const userRole = computed(() => userStore.userInfo?.role)
       top: 0;
       bottom: 0;
       width: 3px;
-      background: linear-gradient(180deg, #667eea 0%, #8b5cf6 50%, #06b6d4 100%);
+      background: linear-gradient(180deg, #0284c7 0%, #0ea5e9 50%, #06b6d4 100%);
       opacity: 0;
       transition: opacity 0.3s;
     }
@@ -442,13 +442,13 @@ const userRole = computed(() => userStore.userInfo?.role)
 
     /* 激活状态 - 更强的光影效果和渐变边框 */
     &.is-active {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.25) 0%, rgba(139, 92, 246, 0.15) 50%, rgba(6, 182, 212, 0.2) 100%);
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.25) 0%, rgba(14, 165, 233, 0.15) 50%, rgba(6, 182, 212, 0.2) 100%);
       color: #fff;
       box-shadow:
-        0 4px 15px rgba(102, 126, 234, 0.3),
-        0 0 20px rgba(102, 126, 234, 0.1),
+        0 4px 15px rgba(2, 132, 199, 0.3),
+        0 0 20px rgba(2, 132, 199, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(102, 126, 234, 0.35);
+      border: 1px solid rgba(2, 132, 199, 0.35);
 
       &::before {
         opacity: 1;
@@ -496,7 +496,7 @@ const userRole = computed(() => userStore.userInfo?.role)
   padding: 16px 16px 8px;
   font-size: 11px;
   font-weight: 600;
-  background: linear-gradient(90deg, rgba(102, 126, 234, 0.6), rgba(139, 92, 246, 0.5), rgba(6, 182, 212, 0.6));
+  background: linear-gradient(90deg, rgba(2, 132, 199, 0.6), rgba(14, 165, 233, 0.5), rgba(6, 182, 212, 0.6));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

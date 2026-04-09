@@ -243,7 +243,7 @@ const statsCards = computed(() => {
         title: '社团总数', 
         value: dashboardData.value.totalClubs || 0, 
         icon: 'OfficeBuilding', 
-        gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        gradient: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
         trend: 12  // 较上月增长 12%
       },
       { 
@@ -275,7 +275,7 @@ const statsCards = computed(() => {
         title: '成员数量', 
         value: dashboardData.value.totalMembers || 0, 
         icon: 'User', 
-        gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        gradient: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
         trend: 10
       },
       { 
@@ -302,7 +302,7 @@ const quickActions = computed(() => {
   // 管理员操作
   if (role === 1) {
     return [
-      { name: '创建活动', icon: 'Plus', path: '/activity', bgColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+      { name: '创建活动', icon: 'Plus', path: '/activity', bgColor: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)' },
       { name: '发布通知', icon: 'Bell', path: '/notification', bgColor: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
       { name: '费用管理', icon: 'Wallet', path: '/payment', bgColor: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
       { name: '申请审批', icon: 'DocumentChecked', path: '/apply', bgColor: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' },
@@ -313,7 +313,7 @@ const quickActions = computed(() => {
   // 社长操作
   else if (role === 2) {
     return [
-      { name: '创建活动', icon: 'Plus', path: '/activity', bgColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+      { name: '创建活动', icon: 'Plus', path: '/activity', bgColor: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)' },
       { name: '发布通知', icon: 'Bell', path: '/notification', bgColor: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
       { name: '费用管理', icon: 'Wallet', path: '/payment', bgColor: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
       { name: '申请审批', icon: 'DocumentChecked', path: '/apply', bgColor: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }
@@ -322,7 +322,7 @@ const quickActions = computed(() => {
   // 学生操作
   else {
     return [
-      { name: '我的社团', icon: 'OfficeBuilding', path: '/my-clubs', bgColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+      { name: '我的社团', icon: 'OfficeBuilding', path: '/my-clubs', bgColor: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)' },
       { name: '我的活动', icon: 'Calendar', path: '/my-activities', bgColor: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)' },
       { name: '我的费用', icon: 'Wallet', path: '/my-payments', bgColor: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }
     ]
@@ -436,8 +436,8 @@ const initCharts = async () => {
       itemStyle: {
         borderRadius: [8, 8, 0, 0],  // 圆角
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: '#667eea' },
-          { offset: 1, color: '#764ba2' }
+          { offset: 0, color: '#0284c7' },
+          { offset: 1, color: '#0ea5e9' }
         ])
       },
       barWidth: '50%'
@@ -526,8 +526,8 @@ const updateMemberChart = (clubs) => {
       itemStyle: {
         borderRadius: [0, 8, 8, 0],
         color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          { offset: 0, color: '#667eea' },
-          { offset: 1, color: '#764ba2' }
+          { offset: 0, color: '#0284c7' },
+          { offset: 1, color: '#0ea5e9' }
         ])
       },
       barWidth: '60%'
@@ -588,8 +588,8 @@ onMounted(() => {
     width: 100%;
     height: 100%;
     background-image:
-      linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px);
+      linear-gradient(rgba(2, 132, 199, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(2, 132, 199, 0.03) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
     z-index: 0;
@@ -604,7 +604,7 @@ onMounted(() => {
 
 // ==================== 欢迎区域 - 流动渐变背景 ====================
 .welcome-section {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 30%, #a855f7 60%, #6366f1 100%);
+  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 30%, #38bdf8 60%, #0284c7 100%);
   background-size: 200% 200%;
   animation: gradientFlow 8s ease infinite;
   border-radius: 16px;
@@ -736,7 +736,7 @@ onMounted(() => {
 
   // 不同卡片不同渐变色
   &.stat-card-1::before {
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #0284c7, #0ea5e9);
   }
   &.stat-card-2::before {
     background: linear-gradient(90deg, #11998e, #38ef7d);
@@ -752,7 +752,7 @@ onMounted(() => {
   &:hover {
     transform: translateY(-6px) rotateX(2deg);
     box-shadow:
-      0 20px 40px -10px rgba(99, 102, 241, 0.2), 0 0 30px rgba(99, 102, 241, 0.08);
+      0 20px 40px -10px rgba(2, 132, 199, 0.2), 0 0 30px rgba(2, 132, 199, 0.08);
 
     &::before {
       opacity: 1;
@@ -783,7 +783,7 @@ onMounted(() => {
   right: -20px;
   bottom: -20px;
   opacity: 0.05;
-  color: #667eea;
+  color: #0284c7;
   transition: all 0.4s ease;
 }
 
@@ -868,7 +868,7 @@ onMounted(() => {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, #6366f1, #a855f7, #3b82f6);
+    background: linear-gradient(90deg, #0284c7, #38bdf8, #3b82f6);
   }
 }
 
@@ -893,7 +893,7 @@ onMounted(() => {
   color: #1e293b;
 
   .el-icon {
-    color: #667eea;
+    color: #0284c7;
   }
 }
 
@@ -913,7 +913,7 @@ onMounted(() => {
     transition: all 0.4s ease;
 
     &:hover {
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.08), 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 8px 25px rgba(2, 132, 199, 0.08), 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
   }
 }
@@ -934,7 +934,7 @@ onMounted(() => {
   color: #1e293b;
 
   .el-icon {
-    color: #667eea;
+    color: #0284c7;
   }
 }
 
@@ -965,7 +965,7 @@ onMounted(() => {
     left: 50%;
     width: 0;
     height: 0;
-    background: radial-gradient(circle, rgba(102, 126, 234, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(2, 132, 199, 0.08) 0%, transparent 70%);
     border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: all 0.5s ease;
@@ -1100,7 +1100,7 @@ onMounted(() => {
   transition: color 0.3s;
 
   .notice-item:hover & {
-    color: #667eea;
+    color: #0284c7;
   }
 }
 

@@ -152,7 +152,7 @@ const currentTheme = ref('purple')
 
 // 主题配置
 const themes = [
-  { id: 'purple', name: '梦幻紫', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+  { id: 'purple', name: '梦幻紫', gradient: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)' },
   { id: 'blue', name: '天空蓝', gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
   { id: 'green', name: '清新绿', gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' },
   { id: 'orange', name: '活力橙', gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
@@ -221,8 +221,8 @@ const handleSocialLogin = (type) => {
 // 主题变量定义
 $themes: (
   purple: (
-    primary: #667eea,
-    secondary: #764ba2,
+    primary: #0284c7,
+    secondary: #0ea5e9,
     orb1: linear-gradient(135deg, #f093fb 0%, #f5576c 100%),
     orb2: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%),
     orb3: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)
@@ -465,9 +465,9 @@ $themes: (
   }
 
   &.active {
-    background: #e0e7ff;
+    background: #e0f2fe;
     .theme-name {
-      color: #667eea;
+      color: #0284c7;
       font-weight: 600;
     }
   }
@@ -774,8 +774,8 @@ $themes: (
     }
 
     &.is-focus {
-      border-color: #667eea;
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 0 20px rgba(102, 126, 234, 0.08);
+      border-color: #0284c7;
+      box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1), 0 0 20px rgba(2, 132, 199, 0.08);
       background: rgba(255, 255, 255, 1);
     }
   }
@@ -791,7 +791,7 @@ $themes: (
 }
 
 .input-wrapper:focus-within .input-icon {
-  color: #667eea;
+  color: #0284c7;
   transform: scale(1.15);
 }
 
@@ -1075,7 +1075,7 @@ $themes: (
   transform: perspective(1000px) rotateX(1deg) rotateY(-1deg) translateY(-4px);
   box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.3),
     0 0 0 1px rgba(255, 255, 255, 0.15) inset,
-    0 0 40px rgba(102, 126, 234, 0.15);
+    0 0 40px rgba(2, 132, 199, 0.15);
 }
 
 // 渐变边框效果
@@ -1083,7 +1083,7 @@ $themes: (
   content: '';
   position: absolute;
   top: -1px; left: -1px; right: -1px; bottom: -1px;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(168, 85, 247, 0.1), rgba(59, 130, 246, 0.3));
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.3), rgba(56, 189, 248, 0.1), rgba(59, 130, 246, 0.3));
   border-radius: 25px;
   z-index: -1;
   opacity: 0;
@@ -1096,13 +1096,13 @@ $themes: (
 
 // 光晕脉冲动画
 @keyframes glowPulse {
-  0%, 100% { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4), 0 0 20px rgba(102, 126, 234, 0.1); }
-  50% { box-shadow: 0 4px 25px rgba(102, 126, 234, 0.6), 0 0 40px rgba(102, 126, 234, 0.2); }
+  0%, 100% { box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4), 0 0 20px rgba(2, 132, 199, 0.1); }
+  50% { box-shadow: 0 4px 25px rgba(2, 132, 199, 0.6), 0 0 40px rgba(2, 132, 199, 0.2); }
 }
 
 // 社交图标发光
 .social-login .social-icon:hover {
   transform: translateY(-3px) scale(1.1);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3);
 }
 </style>
